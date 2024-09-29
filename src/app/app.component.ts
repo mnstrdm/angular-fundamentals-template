@@ -1,9 +1,7 @@
 import { Component } from "@angular/core";
 import {
-  faTrash,
   faPencil,
   IconDefinition,
-  faTrashAlt,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -19,6 +17,7 @@ export class AppComponent {
   btnTextLogin: string = "Login";
   btnTextLogout: string = "Logout";
   btnTextAddNewCourse: string = "Add New Course";
+  btnTextShowCourse: string = "Show Course";
 
   // icons for buttons
   faTrashCan: IconDefinition = faTrashCan;
