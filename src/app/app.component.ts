@@ -4,6 +4,7 @@ import {
   IconDefinition,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
+import { mockedCoursesList } from "./shared/mocks/mocks";
 
 @Component({
   selector: "app-root",
@@ -26,4 +27,8 @@ export class AppComponent {
   // info page text
   infoTitle = "Your List Is Empty";
   infoText = "Please use 'Add New Course' button to add your first course";
+
+  // Mocked Course
+  mockedCourse = mockedCoursesList[0];
+  showCourse(coursId: string) {}
 }
