@@ -1,10 +1,12 @@
 import { Component, Input } from "@angular/core";
-import {
-  faPencil,
-  IconDefinition,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
-
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  creationDate: string;
+  duration: number;
+  authors: string[];
+}
 @Component({
   selector: "app-course-card",
   templateUrl: "./course-card.component.html",
@@ -12,4 +14,11 @@ import {
 })
 export class CourseCardComponent {
   @Input() isEditabel!: boolean;
+  @Input() course!: Course;
+
+  /* title = this.course.title;
+  description = this.course.description;
+  authors = this.course.authors.join(", ");
+  duration = this.course.duration;
+  created = this.course.creationDate; */
 }
