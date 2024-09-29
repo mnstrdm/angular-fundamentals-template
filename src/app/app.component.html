@@ -12,7 +12,11 @@
   </app-info>
 
   <!-- Course Card component -->
-  <app-course-card [isEditabel]="true">
+  <app-course-card
+    [isEditabel]="true"
+    [course]="mockedCourse"
+    (clickOnShow)="showCourse($event)"
+  >
     <app-button showCourseBtn [buttonText]="btnTextShowCourse"></app-button>
     <app-button deleteBtn [iconName]="faTrashCan"></app-button>
     <app-button editBtn [iconName]="faPencil"></app-button>
