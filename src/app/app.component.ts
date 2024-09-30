@@ -30,5 +30,14 @@ export class AppComponent {
 
   // Mocked Course
   mockedCourse = mockedCoursesList[0];
-  showCourse(coursId: string) {}
+  mockedCoursesList = mockedCoursesList;
+  showCourse(courseId: string) {
+    console.log("Clicked on Show Course with ID:", courseId);
+  }
+  deleteCourse(courseId: string) {
+    console.log("Clicked on Delete Course with ID:", courseId);
+  }
+  editCourse(courseId: string) {
+    console.log("Clicked on Edit Course with ID:", courseId);
+  }
 }
