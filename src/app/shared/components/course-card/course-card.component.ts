@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { CoursesService } from "@app/services/courses.service";
 interface Course {
   id: string;
   title: string;
@@ -19,6 +20,28 @@ export class CourseCardComponent {
   @Output() clickOnShow: EventEmitter<string> = new EventEmitter();
   @Output() clickOnDelete: EventEmitter<string> = new EventEmitter();
   @Output() clickOnEdit: EventEmitter<string> = new EventEmitter();
+
+  id: string = "";
+  title: string = "";
+  description: string = "";
+  creationDate: string = "";
+  duration: string = "";
+  authors: string[] = [];
+
+  constructor(private coursesService: CoursesService) {}
+
+  ngOnInit(): void {
+    this.id = this.course.id;
+    this.title = this.course.title;
+    this.description = this.course.description;
+    this.creationDate = this.coursesService.formatCreationDate(
+      this.course.creationDate
+    );
+    this.duration = this.coursesService.getCourseDuration(this.course.duration);
+    this.authors = this.course.authors.map((authorId: string) =>
+      this.coursesService.getAuthorById(authorId)
+    );
+  }
 
   onShowCourse() {
     this.clickOnShow.emit(this.course.id);
