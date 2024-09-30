@@ -46,4 +46,24 @@ export class CoursesService {
       "Cannot find author";
     return authorName;
   }
+  getCourseDuration(minutes: number) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    const formattedHours = hours < 10 ? "0" + hours : hours;
+    const formattedMinutes =
+      remainingMinutes < 10 ? "0" + remainingMinutes : remainingMinutes;
+
+    const hourText = hours === 1 ? "hour" : "hours";
+
+    const formattedDuration = `${formattedHours}:${formattedMinutes} ${hourText}`;
+
+    return formattedDuration;
+  }
+  formatCreationDate(date: string) {
+    const [m, d, y] = date.split("/");
+    const formattedDate = `${d}.${m}.${y}`;
+
+    return formattedDate;
+  }
 }
