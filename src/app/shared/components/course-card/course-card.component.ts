@@ -17,9 +17,17 @@ export class CourseCardComponent {
   @Input() course!: Course;
 
   @Output() clickOnShow: EventEmitter<string> = new EventEmitter();
+  @Output() clickOnDelete: EventEmitter<string> = new EventEmitter();
+  @Output() clickOnEdit: EventEmitter<string> = new EventEmitter();
 
   onShowCourse() {
     this.clickOnShow.emit(this.course.id);
+  }
+  onDeleteCourse() {
+    this.clickOnDelete.emit(this.course.id);
+  }
+  onEditCourse() {
+    this.clickOnEdit.emit(this.course.id);
   }
   /* title = this.course.title;
   description = this.course.description;
