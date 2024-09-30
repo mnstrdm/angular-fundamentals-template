@@ -25,7 +25,7 @@ export class CourseCardComponent {
   title: string = "";
   description: string = "";
   creationDate: string = "";
-  duration: string = "";
+  duration: number = 0;
   authors: string[] = [];
 
   constructor(private coursesService: CoursesService) {}
@@ -34,13 +34,17 @@ export class CourseCardComponent {
     this.id = this.course.id;
     this.title = this.course.title;
     this.description = this.course.description;
-    this.creationDate = this.coursesService.formatCreationDate(
+    //possible future formats
+    /* this.creationDate = this.coursesService.formatCreationDate(
       this.course.creationDate
-    );
+    ); 
     this.duration = this.coursesService.getCourseDuration(this.course.duration);
     this.authors = this.course.authors.map((authorId: string) =>
       this.coursesService.getAuthorById(authorId)
-    );
+    );*/
+    this.creationDate = this.course.creationDate;
+    this.duration = this.course.duration;
+    this.authors = this.course.authors;
   }
 
   onShowCourse() {
