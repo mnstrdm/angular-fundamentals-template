@@ -1,2 +1,13 @@
-<p>courses-list works!</p>
-<app-course-card></app-course-card>
+<ng-container *ngFor="let course of courses">
+  <app-course-card
+    [isEditabel]="true"
+    [course]="course"
+    (clickOnShow)="onShowCourse($event)"
+    (clickOnDelete)="onDeleteCourse($event)"
+    (clickOnEdit)="onEditCourse($event)"
+  >
+    <app-button showCourseBtn [buttonText]="btnTextShowCourse"></app-button>
+    <app-button deleteBtn [iconName]="faTrashCan"></app-button>
+    <app-button editBtn [iconName]="faPencil"></app-button>
+  </app-course-card>
+</ng-container>
