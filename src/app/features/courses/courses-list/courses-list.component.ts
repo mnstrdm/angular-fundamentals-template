@@ -1,4 +1,9 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  IconDefinition,
+  faTrashCan,
+  faPencil,
+} from "@fortawesome/free-solid-svg-icons";
 interface Course {
   id: string;
   title: string;
@@ -19,4 +24,22 @@ export class CoursesListComponent {
   @Output() editCourse = new EventEmitter<string>();
   @Output() deleteCourse = new EventEmitter<string>();
 
+  btnTextShowCourse: string = "Show Course";
+
+  // icons for buttons
+  faTrashCan: IconDefinition = faTrashCan;
+  faPencil: IconDefinition = faPencil;
+
+  onShowCourse(courseId: string) {
+    console.log("Emit course ID from Course List with Show Course");
+    this.showCourse.emit(courseId);
+  }
+  onDeleteCourse(courseId: string) {
+    console.log("Emit course ID from Course List with Delete Course");
+    this.deleteCourse.emit(courseId);
+  }
+  onEditCourse(courseId: string) {
+    console.log("Emit course ID from Course List with Edit Course");
+    this.editCourse.emit(courseId);
+  }
 }
