@@ -1,9 +1,5 @@
 import { Component } from "@angular/core";
-import {
-  faPencil,
-  IconDefinition,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+
 import { mockedCoursesList } from "./shared/mocks/mocks";
 
 @Component({
@@ -18,11 +14,6 @@ export class AppComponent {
   btnTextLogin: string = "Login";
   btnTextLogout: string = "Logout";
   btnTextAddNewCourse: string = "Add New Course";
-  btnTextShowCourse: string = "Show Course";
-
-  // icons for buttons
-  faTrashCan: IconDefinition = faTrashCan;
-  faPencil: IconDefinition = faPencil;
 
   // info page text
   infoTitle = "Your List Is Empty";
