@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { CoursesService } from "@app/services/courses.service";
+import { Component, Input } from "@angular/core";
 interface Course {
   id: string;
   title: string;
@@ -13,32 +12,7 @@ interface Course {
   templateUrl: "./course-info.component.html",
   styleUrls: ["./course-info.component.scss"],
 })
-export class CourseInfoComponent implements OnInit {
+export class CourseInfoComponent {
   @Input() course!: Course;
   // Use the names for the input `course`.
-  id: string = "";
-  title: string = "";
-  description: string = "";
-  creationDate: string = "";
-  duration: number = 0;
-  authors: string[] = [];
-
-  constructor(private coursesService: CoursesService) {}
-
-  ngOnInit(): void {
-    this.id = this.course.id;
-    this.title = this.course.title;
-    this.description = this.course.description;
-    //possible future formats
-    /* this.creationDate = this.coursesService.formatCreationDate(
-      this.course.creationDate
-    ); 
-    this.duration = this.coursesService.getCourseDuration(this.course.duration);
-    this.authors = this.course.authors.map((authorId: string) =>
-      this.coursesService.getAuthorById(authorId)
-    );*/
-    this.creationDate = this.course.creationDate;
-    this.duration = this.course.duration;
-    this.authors = this.course.authors;
-  }
 }
