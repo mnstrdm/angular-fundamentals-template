@@ -1,36 +1,34 @@
 <div class="course-card">
   <div class="course-card__description">
-    <!-- Replace ::text:: with your code -->
-    <div class="course-card__description-title">{{ title }}</div>
-    <div class="course-card__description-text">{{ description }}</div>
+    <div class="course-card__description-title">{{ course.title }}</div>
+    <div class="course-card__description-text">{{ course.description }}</div>
   </div>
   <div class="course-card__info">
     <div class="course-card__info-text">
       <div>
         <b>Authors: </b>
-        {{ authors.join(", ") }}
+        {{ course.authors.join(", ") }}
       </div>
       <div>
         <b>Duration: </b
-        ><span class="course-card__duration">{{ duration }}</span>
+        ><span class="course-card__duration">{{ course.duration }}</span>
       </div>
       <div>
         <b>Created: </b
-        ><span class="course-card__date">{{ creationDate }}</span>
+        ><span class="course-card__date">{{ course.creationDate }}</span>
       </div>
     </div>
     <div class="course-card__info-actions">
-      <div (click)="onShowCourse()">
-        <ng-content select="[showCourseBtn]"></ng-content>
-      </div>
+      <app-button
+        (click)="onShowCourse()"
+        [buttonText]="btnTextShowCourse"
+      ></app-button>
       <div class="course-card__buttons" *ngIf="isEditabel">
-        <!--Enter your code here-->
-        <div (click)="onDeleteCourse()">
-          <ng-content select="[deleteBtn]"></ng-content>
-        </div>
-        <div (click)="onEditCourse()">
-          <ng-content select="[editBtn]"></ng-content>
-        </div>
+        <app-button
+          (click)="onDeleteCourse()"
+          [iconName]="faTrashCan"
+        ></app-button>
+        <app-button (click)="onEditCourse()" [iconName]="faPencil"></app-button>
       </div>
     </div>
   </div>
