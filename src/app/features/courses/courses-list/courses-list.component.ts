@@ -4,18 +4,11 @@ import {
   faTrashCan,
   faPencil,
 } from "@fortawesome/free-solid-svg-icons";
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  creationDate: string;
-  duration: number;
-  authors: string[];
-}
+import { Course } from "@app/shared/models/course.model";
 @Component({
   selector: "app-courses-list",
   templateUrl: "./courses-list.component.html",
-  styleUrls: ["./courses-list.component.css"],
+  styleUrls: ["./courses-list.component.scss"],
 })
 export class CoursesListComponent {
   @Input() courses!: Course[];
@@ -23,12 +16,6 @@ export class CoursesListComponent {
   @Output() showCourse = new EventEmitter<string>();
   @Output() editCourse = new EventEmitter<string>();
   @Output() deleteCourse = new EventEmitter<string>();
-
-  btnTextShowCourse: string = "Show Course";
-
-  // icons for buttons
-  faTrashCan: IconDefinition = faTrashCan;
-  faPencil: IconDefinition = faPencil;
 
   onShowCourse(courseId: string) {
     console.log("Emit course ID from Course List with Show Course");
