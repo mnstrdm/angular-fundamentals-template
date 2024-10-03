@@ -19,9 +19,6 @@
     (clickOnDelete)="deleteCourse($event)"
     (clickOnEdit)="editCourse($event)"
   >
-    <app-button showCourseBtn [buttonText]="btnTextShowCourse"></app-button>
-    <app-button deleteBtn [iconName]="faTrashCan"></app-button>
-    <app-button editBtn [iconName]="faPencil"></app-button>
   </app-course-card>
 
   <app-course-info [course]="mockedCourse"></app-course-info>
