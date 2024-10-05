@@ -1,28 +1,62 @@
 <h2 class="text-align-center">Registration</h2>
 <div class="app-plate">
-  <div class="registration-form">
+  <div class="registration-form" [formGroup]="registrationForm">
     <div>
       <div class="form__control">
         <label for="name">Name</label>
         <!--Use the name `name` for the form control.-->
-        <input type="text" id="name" placeholder="Input text"/>
-        <span id="nameErrorMessage" class="text-danger">Name is required.</span>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Input text"
+          required
+        />
+        <span
+          *ngIf="!name?.valid && (name?.touched || submitted)"
+          id="nameErrorMessage"
+          class="text-danger"
+          >Name is required.</span
+        >
       </div>
       <div class="form__control">
         <!--Use the name `email` for the form control.-->
         <label for="email">Email</label>
-        <input type="text" id="email" placeholder="Input text"/>
-        <span id="emailErrorMessage" class="text-danger">Email is required.</span>
+        <input
+          type="text"
+          id="email"
+          formControlName="email"
+          placeholder="Input text"
+          required
+        />
+        <span
+          *ngIf="!email?.valid && (email?.touched || submitted)"
+          id="emailErrorMessage"
+          class="text-danger"
+          >Email is required.</span
+        >
       </div>
       <div class="form__control">
         <!--Use the name `password` for the form control.-->
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Input text"/>
-        <span id="passwordErrorMessage" class="text-danger">Password is required.</span>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Input text"
+          required
+        />
+        <span
+          *ngIf="!password?.valid && (password?.touched || submitted)"
+          id="passwordErrorMessage"
+          class="text-danger"
+          >Password is required.</span
+        >
       </div>
     </div>
-    <div class="form__action">
-      <app-button></app-button>
+    <div class="form__action" (click)="onSubmit()">
+      <app-button [buttonText]="'Registration'"></app-button>
     </div>
+    <p>If you have an account you may <b>Login</b></p>
   </div>
 </div>
