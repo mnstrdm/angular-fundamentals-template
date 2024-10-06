@@ -88,7 +88,7 @@
             <label>Authors List</label>
             <ul>
               <li *ngFor="let author of authors.controls; let i = index">
-                {{ author.value }}
+                {{ author.value.name }}
                 <fa-icon
                   [icon]="['fas', 'plus']"
                   (click)="addAuthor(i)"
@@ -106,7 +106,7 @@
             </p>
             <ul>
               <li *ngFor="let author of courseAuthors.controls; let i = index">
-                {{ author.value }}
+                {{ author.value.name }}
                 <fa-icon
                   [icon]="['fas', 'trash-can']"
                   (click)="deleteAuthor(i)"

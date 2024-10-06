@@ -21,7 +21,7 @@ import { Author } from "@app/shared/models/author.model";
 })
 export class CourseFormComponent implements OnInit {
   courseForm!: FormGroup;
-  authorsList: string[] = [];
+  authorsList: Author[] = [];
   courseAuthorsList: string[] = [];
   submitted!: boolean;
 
@@ -35,7 +35,7 @@ export class CourseFormComponent implements OnInit {
     const courseAuthorsListArray = this.courseForm.get(
       "courseAuthors"
     ) as FormArray;
-    this.authorsList = mockedAuthorsList.map((auth: Author) => auth.name);
+    this.authorsList = [...mockedAuthorsList];
     this.authorsList.forEach((author) => {
       authorsListArray.push(this.fb.control(author));
     });
@@ -55,7 +55,7 @@ export class CourseFormComponent implements OnInit {
       newAuthor: this.fb.group({
         author: [
           "",
-          [Validators.minLength(2), Validators.pattern("^[a-zA-Z0-9]*$")],
+          [Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\s]*$/)],
         ],
       }),
       authors: this.fb.array([]),
@@ -97,8 +97,10 @@ export class CourseFormComponent implements OnInit {
   }
 
   addNewAuthor(): void {
-    this.authors.push(this.fb.control({ id: v4(), name: this.author.value }));
-    this.newAuthor.reset();
+    if (this.newAuthor.valid && this.newAuthor.value.author.length > 0) {
+      this.authors.push(this.fb.control({ id: v4(), name: this.author.value }));
+      this.newAuthor.reset();
+    }
   }
 
   onSubmit() {
