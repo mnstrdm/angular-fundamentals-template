@@ -5,6 +5,9 @@ import { Pipe } from "@angular/core";
 })
 export class DurationPipe {
   transform(minutes: number): string {
+    if (minutes < 0) {
+      minutes = 0;
+    }
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
 
