@@ -2,11 +2,12 @@
 
 input:invalid,
 textarea:invalid {
-  border: 1px solid #cfcfcf;
+  border: 1px solid $color-gray;
 }
 
-input.ng-invalid.ng-touched {
-  border: 1px solid red;
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border: 1px solid $color-red;
 }
 
 .course {
@@ -43,4 +44,10 @@ input.ng-invalid.ng-touched {
     margin-left: 4px;
     cursor: pointer;
   }
+}
+
+.form__action {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
 }

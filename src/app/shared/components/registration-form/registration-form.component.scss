@@ -10,9 +10,9 @@
 
 input:invalid,
 textarea:invalid {
-  border: 1px solid #cfcfcf;
+  border: 1px solid $color-gray;
 }
 
 input.ng-invalid.ng-touched {
-  border: 1px solid red;
+  border: 1px solid $color-red;
 }
