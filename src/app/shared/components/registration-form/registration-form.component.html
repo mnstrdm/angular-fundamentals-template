@@ -4,7 +4,7 @@
     <div>
       <div class="form__control">
         <label for="name">Name</label>
-        <!--Use the name `name` for the form control.-->
+
         <input
           type="text"
           id="name"
@@ -12,15 +12,19 @@
           placeholder="Input text"
           required
         />
-        <span
+        <div
           *ngIf="!name?.valid && (name?.touched || submitted)"
           id="nameErrorMessage"
-          class="text-danger"
-          >Name is required.</span
         >
+          <span *ngIf="name?.errors?.['required']" class="text-danger"
+            >Name is required.</span
+          >
+          <span *ngIf="name?.errors?.['minlength']" class="text-danger"
+            >Name sould be at least 6 characters.</span
+          >
+        </div>
       </div>
       <div class="form__control">
-        <!--Use the name `email` for the form control.-->
         <label for="email">Email</label>
         <input
           type="text"
@@ -29,15 +33,19 @@
           placeholder="Input text"
           required
         />
-        <span
+        <div
           *ngIf="!email?.valid && (email?.touched || submitted)"
           id="emailErrorMessage"
-          class="text-danger"
-          >Email is required.</span
         >
+          <span *ngIf="email?.errors?.['required']" class="text-danger"
+            >Email is required.</span
+          >
+          <span *ngIf="email?.errors?.['invalidEmail']" class="text-danger"
+            >Email should be in valid format.</span
+          >
+        </div>
       </div>
       <div class="form__control">
-        <!--Use the name `password` for the form control.-->
         <label for="password">Password</label>
         <input
           type="password"
@@ -55,7 +63,7 @@
       </div>
     </div>
     <div class="form__action" (click)="onSubmit()">
-      <app-button [buttonText]="'Registration'"></app-button>
+      <app-button [buttonText]="btnTextRegistration"></app-button>
     </div>
     <p>If you have an account you may <b>Login</b></p>
   </div>
