@@ -24,6 +24,12 @@ export class CourseFormComponent implements OnInit {
   authorsList: Author[] = [];
   courseAuthorsList: string[] = [];
   submitted!: boolean;
+  authorsListError!: boolean;
+  authorsListArray!: FormArray;
+  courseAuthorsListArray!: FormArray;
+
+  btnTextCreateCourse: string = "Create Course";
+  btnTextCancel: string = "Cancel";
 
   constructor(public fb: FormBuilder, public library: FaIconLibrary) {
     library.addIconPacks(fas);
@@ -31,21 +37,24 @@ export class CourseFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const authorsListArray = this.courseForm.get("authors") as FormArray;
-    const courseAuthorsListArray = this.courseForm.get(
+    this.authorsListArray = this.courseForm.get("authors") as FormArray;
+    this.courseAuthorsListArray = this.courseForm.get(
       "courseAuthors"
     ) as FormArray;
-    this.authorsList = [...mockedAuthorsList];
-    this.authorsList.forEach((author) => {
-      authorsListArray.push(this.fb.control(author));
-    });
+    this.initAuthorsList();
     this.courseAuthorsList.forEach((author) => {
-      courseAuthorsListArray.push(this.fb.control(author));
+      this.courseAuthorsListArray.push(this.fb.control(author));
     });
 
     this.submitted = false;
   }
 
+  initAuthorsList() {
+    this.authorsList = [...mockedAuthorsList];
+    this.authorsList.forEach((author) => {
+      this.authorsListArray.push(this.fb.control(author));
+    });
+  }
   // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
   buildForm(): void {
     this.courseForm = this.fb.group({
@@ -62,6 +71,7 @@ export class CourseFormComponent implements OnInit {
       courseAuthors: this.fb.array([]),
     });
   }
+
   get title(): FormControl {
     return this.courseForm.get("title") as FormControl;
   }
@@ -90,6 +100,9 @@ export class CourseFormComponent implements OnInit {
   addAuthor(index: number): void {
     this.courseAuthors.push(this.fb.control(this.authors.value[index]));
     this.authors.removeAt(index);
+    if (this.courseAuthors.value.length > 0) {
+      this.authorsListError = false;
+    }
   }
   deleteAuthor(index: number): void {
     this.authors.push(this.fb.control(this.courseAuthors.value[index]));
@@ -106,15 +119,16 @@ export class CourseFormComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.courseForm.valid) {
-      console.log(
-        `Id: ${v4()}
-         Title: ${this.title.value},
-         description: ${this.description.value},
-         duration: ${this.duration.value},
-         Authors: ${this.courseAuthors.value}`
-      );
-      this.courseForm.reset();
-      this.submitted = false;
+      if (this.courseAuthors.value.length > 0) {
+        this.courseForm.reset();
+        this.courseAuthors.clear();
+        this.authorsListArray.clear();
+        this.initAuthorsList();
+        this.authorsListError = false;
+        this.submitted = false;
+      } else {
+        this.authorsListError = true;
+      }
     }
   }
 }
