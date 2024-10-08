@@ -3,7 +3,6 @@ import {
   AbstractControl,
   NG_VALIDATORS,
   ValidationErrors,
-  Validator,
   ValidatorFn,
 } from "@angular/forms";
 
@@ -17,7 +16,7 @@ import {
     },
   ],
 })
-export class EmailValidatorDirective implements Validator {
+export class EmailValidatorDirective {
   // Add your code here
   validate(control: AbstractControl): ValidationErrors | null {
     return emailValidator()(control);
