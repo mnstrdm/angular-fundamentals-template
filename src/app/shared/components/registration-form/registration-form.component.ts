@@ -9,7 +9,7 @@ import { emailValidator } from "@app/shared/directives/email.directive";
 })
 export class RegistrationFormComponent implements OnInit {
   registrationForm!: FormGroup;
-
+  btnTextRegistration: string = "Registration";
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
       name: new FormControl(null, [
@@ -35,8 +35,9 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
     if (this.registrationForm.valid) {
-      this.submitted = true;
+      this.submitted = false;
       this.registrationForm.reset();
     }
   }
