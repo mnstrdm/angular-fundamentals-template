@@ -5,7 +5,7 @@
       <div>
         <div class="form__control">
           <label for="email">Email</label>
-          <!--Use the name `email` for the form control.-->
+
           <input
             type="text"
             id="email"
@@ -16,16 +16,21 @@
             ngModel
             #email="ngModel"
           />
-          <span
+          <div
             *ngIf="!email.valid && (email.touched || loginForm.submitted)"
             id="emailErrorMessage"
-            class="text-danger"
-            >Email is required.</span
           >
+            <span *ngIf="email.errors?.['required']" class="text-danger"
+              >Email is required.</span
+            >
+            <span *ngIf="email.errors?.['invalidEmail']" class="text-danger"
+              >Email should be in valid format.</span
+            >
+          </div>
         </div>
         <div class="form__control">
           <label for="password">Password</label>
-          <!--Use the name `password` for the form control.-->
+
           <input
             type="password"
             id="password"
@@ -45,7 +50,7 @@
       </div>
       <div>
         <div class="form__action" (click)="onLogin()">
-          <app-button [buttonText]="'Login'"></app-button>
+          <app-button [buttonText]="btnTextLogin"></app-button>
         </div>
         <div class="form__text">
           If you don't have an account you may <strong>Registration</strong>

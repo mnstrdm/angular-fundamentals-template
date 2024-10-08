@@ -8,15 +8,16 @@ import { NgForm } from "@angular/forms";
 })
 export class LoginFormComponent {
   @ViewChild("loginForm") public loginForm!: NgForm;
-  //Use the names `email` and `password` for form controls.
+
+  btnTextLogin: string = "Login";
 
   onSubmit() {
-    this.loginForm.resetForm();
+    if (this.loginForm.valid) {
+      this.loginForm.resetForm();
+    }
   }
   onLogin() {
-    if (this.loginForm.valid) {
-      const event = new Event("submit");
-      this.loginForm.onSubmit(event);
-    }
+    const event = new Event("submit");
+    this.loginForm.onSubmit(event);
   }
 }
