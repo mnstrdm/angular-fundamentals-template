@@ -14,5 +14,6 @@ interface Course {
 })
 export class CourseInfoComponent {
   @Input() course!: Course;
+  btnTextBack: string = "Back";
   // Use the names for the input `course`.
 }
