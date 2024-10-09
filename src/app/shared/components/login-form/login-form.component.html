@@ -1,6 +1,6 @@
 <h2 class="text-align-center">Login</h2>
 <div class="app-plate">
-  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+  <form #loginForm="ngForm">
     <div class="login-form">
       <div>
         <div class="form__control">
@@ -17,7 +17,7 @@
             #email="ngModel"
           />
           <div
-            *ngIf="!email.valid && (email.touched || loginForm.submitted)"
+            *ngIf="!email.valid && (email.touched || submitted)"
             id="emailErrorMessage"
           >
             <span *ngIf="email.errors?.['required']" class="text-danger"
@@ -41,7 +41,7 @@
             #password="ngModel"
           />
           <span
-            *ngIf="!password.valid && (password.touched || loginForm.submitted)"
+            *ngIf="!password.valid && (password.touched || submitted)"
             id="passwordErrorMessage"
             class="text-danger"
             >Password is required.</span
