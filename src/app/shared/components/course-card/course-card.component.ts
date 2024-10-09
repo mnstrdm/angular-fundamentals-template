@@ -5,6 +5,7 @@ import {
   faPencil,
 } from "@fortawesome/free-solid-svg-icons";
 import { Course } from "@app/shared/models/course.model";
+import { ButtonLabels } from "@app/shared/constants/button-labels";
 @Component({
   selector: "app-course-card",
   templateUrl: "./course-card.component.html",
@@ -18,7 +19,7 @@ export class CourseCardComponent {
   @Output() clickOnDelete: EventEmitter<string> = new EventEmitter();
   @Output() clickOnEdit: EventEmitter<string> = new EventEmitter();
 
-  btnTextShowCourse: string = "Show Course";
+  btnTextShowCourse: string = ButtonLabels.showCourse;
 
   // icons for buttons
   faTrashCan: IconDefinition = faTrashCan;

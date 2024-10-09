@@ -13,6 +13,7 @@ import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { mockedAuthorsList } from "@app/shared/mocks/mocks";
 import { Author } from "@app/shared/models/author.model";
+import { ButtonLabels } from "@app/shared/constants/button-labels";
 
 @Component({
   selector: "app-course-form",
@@ -28,8 +29,9 @@ export class CourseFormComponent implements OnInit {
   authorsListArray!: FormArray;
   courseAuthorsListArray!: FormArray;
 
-  btnTextCreateCourse: string = "Create Course";
-  btnTextCancel: string = "Cancel";
+  btnTextCreateCourse: string = ButtonLabels.createCourse;
+  btnTextCancel: string = ButtonLabels.cancel;
+  btnTextCreateAuthor: string = ButtonLabels.createAuthor;
 
   constructor(public fb: FormBuilder, public library: FaIconLibrary) {
     library.addIconPacks(fas);

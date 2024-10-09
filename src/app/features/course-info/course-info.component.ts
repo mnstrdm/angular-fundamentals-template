@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { ButtonLabels } from "@app/shared/constants/button-labels";
 interface Course {
   id: string;
   title: string;
@@ -14,6 +15,6 @@ interface Course {
 })
 export class CourseInfoComponent {
   @Input() course!: Course;
-  btnTextBack: string = "Back";
+  btnTextBack: string = ButtonLabels.back;
   // Use the names for the input `course`.
 }

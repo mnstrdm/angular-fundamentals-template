@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ButtonLabels } from "@app/shared/constants/button-labels";
 import { emailValidator } from "@app/shared/directives/email.directive";
 
 @Component({
@@ -9,7 +10,7 @@ import { emailValidator } from "@app/shared/directives/email.directive";
 })
 export class RegistrationFormComponent implements OnInit {
   registrationForm!: FormGroup;
-  btnTextRegistration: string = "Registration";
+  btnTextRegistration: string = ButtonLabels.registration;
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
       name: new FormControl(null, [

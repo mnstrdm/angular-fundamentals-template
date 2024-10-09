@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ButtonLabels } from "@app/shared/constants/button-labels";
 
 @Component({
   selector: "app-search",
@@ -7,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 })
 export class SearchComponent {
   searchTerm: string = "";
-  btnTextSearch: string = "Search";
+  btnTextSearch: string = ButtonLabels.search;
 
   @Input() placeholder: string = "Input text";
   @Output() search: EventEmitter<string> = new EventEmitter();
