@@ -1,5 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { ButtonLabels } from "@app/shared/constants/button-labels";
 
 @Component({
   selector: "app-login-form",
@@ -9,15 +10,14 @@ import { NgForm } from "@angular/forms";
 export class LoginFormComponent {
   @ViewChild("loginForm") public loginForm!: NgForm;
 
-  btnTextLogin: string = "Login";
+  btnTextLogin: string = ButtonLabels.login;
+  submitted: boolean = false;
 
-  onSubmit() {
+  onLogin() {
+    this.submitted = true;
     if (this.loginForm.valid) {
       this.loginForm.resetForm();
+      this.submitted = false;
     }
-  }
-  onLogin() {
-    const event = new Event("submit");
-    this.loginForm.onSubmit(event);
   }
 }
