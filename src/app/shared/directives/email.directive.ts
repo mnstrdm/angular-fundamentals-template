@@ -24,7 +24,7 @@ export class EmailValidatorDirective {
 }
 export function emailValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/;
+    const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/;
     const email = control.value;
 
     if (email && !emailRegExp.test(email)) {
