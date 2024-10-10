@@ -1,7 +1,17 @@
-@import 'src/app/shared/styles/styles';
+@import "src/app/shared/styles/styles";
+
+input:invalid,
+textarea:invalid {
+  border: 1px solid $color-gray;
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border: 1px solid $color-red;
+}
 
 .course {
- min-width: 60vw;
+  min-width: 60vw;
 
   &__flex {
     display: flex;
@@ -34,4 +44,10 @@
     margin-left: 4px;
     cursor: pointer;
   }
+}
+
+.form__action {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
 }
