@@ -143,7 +143,10 @@
       <div class="separator"></div>
 
       <div class="form__action">
-        <app-button [buttonText]="btnTextCancel"></app-button>
+        <app-button
+          [buttonText]="btnTextCancel"
+          (click)="onCancel()"
+        ></app-button>
         <app-button
           [buttonText]="btnTextCreateCourse"
           (click)="onSubmit()"

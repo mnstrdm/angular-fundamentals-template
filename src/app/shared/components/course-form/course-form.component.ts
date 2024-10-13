@@ -14,6 +14,8 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { mockedAuthorsList } from "@app/shared/mocks/mocks";
 import { Author } from "@app/shared/models/author.model";
 import { ButtonLabels } from "@app/shared/constants/button-labels";
+import { Location } from "@angular/common";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-course-form",
@@ -33,7 +35,12 @@ export class CourseFormComponent implements OnInit {
   btnTextCancel: string = ButtonLabels.cancel;
   btnTextCreateAuthor: string = ButtonLabels.createAuthor;
 
-  constructor(public fb: FormBuilder, public library: FaIconLibrary) {
+  constructor(
+    public fb: FormBuilder,
+    public library: FaIconLibrary,
+    private location: Location,
+    private route: ActivatedRoute
+  ) {
     library.addIconPacks(fas);
     this.buildForm();
   }
@@ -132,5 +139,9 @@ export class CourseFormComponent implements OnInit {
         this.authorsListError = true;
       }
     }
+  }
+
+  onCancel() {
+    this.location.back();
   }
 }
