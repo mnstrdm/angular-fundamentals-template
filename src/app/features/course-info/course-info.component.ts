@@ -1,5 +1,9 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { ButtonLabels } from "@app/shared/constants/button-labels";
+import { mockedCoursesList } from "@app/shared/mocks/mocks";
+import { Location } from "@angular/common";
+
 interface Course {
   id: string;
   title: string;
@@ -13,8 +17,21 @@ interface Course {
   templateUrl: "./course-info.component.html",
   styleUrls: ["./course-info.component.scss"],
 })
-export class CourseInfoComponent {
-  @Input() course!: Course;
+export class CourseInfoComponent implements OnInit {
+  course!: Course | undefined;
   btnTextBack: string = ButtonLabels.back;
-  // Use the names for the input `course`.
+  courseId: string | null = null;
+
+  constructor(private route: ActivatedRoute, private location: Location) {}
+
+  ngOnInit(): void {
+    this.courseId = this.route.snapshot.paramMap.get("id");
+    this.course = mockedCoursesList.find(
+      (course) => course.id === this.courseId
+    );
+  }
+
+  onBack() {
+    this.location.back();
+  }
 }
