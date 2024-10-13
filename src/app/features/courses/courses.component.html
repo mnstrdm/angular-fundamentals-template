@@ -1,1 +1,13 @@
-<app-search></app-search>
+<div *ngIf="mockedCoursesList.length > 0; else noCourse">
+  <app-search></app-search>
+
+  <app-courses-list
+    [courses]="mockedCoursesList"
+    (showCourse)="showCourse($event)"
+    (deleteCourse)="deleteCourse($event)"
+    (editCourse)="editCourse($event)"
+  ></app-courses-list>
+</div>
+<ng-template #noCourse>
+  <app-info [title]="infoTitle" [text]="infoText"></app-info>
+</ng-template>
