@@ -10,6 +10,8 @@ import { CoursesStoreService } from "@app/services/courses-store.service";
 import { CoursesService } from "@app/services/courses.service";
 import { CourseListModule } from "./features/courses/courses-list/courses-list.module";
 import { CoursesModule } from "./features/courses/courses.module";
+import { AppRoutingModul } from "./app-routing.module";
+import { AuthModule } from "./auth/auth.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +22,8 @@ import { CoursesModule } from "./features/courses/courses.module";
     CourseInfoModule,
     CourseListModule,
     CoursesModule,
+    AppRoutingModul,
+    AuthModule,
   ],
   providers: [
     AuthorizedGuard,
