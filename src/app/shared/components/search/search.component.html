@@ -1,5 +1,5 @@
-<form #searchForm="ngForm">
-  <div class="app-search">
+<div class="app-search">
+  <form #searchForm="ngForm" class="search-form">
     <input
       type="text"
       [placeholder]="placeholder"
@@ -7,5 +7,11 @@
       [(ngModel)]="searchTerm"
     />
     <app-button [buttonText]="btnTextSearch" (click)="onSearch()"></app-button>
-  </div>
-</form>
+  </form>
+  <app-button
+    *ngIf="isAdmin"
+    class="addButton"
+    [buttonText]="btnTextAddNewCourse"
+    (click)="onAddNewCourse()"
+  ></app-button>
+</div>

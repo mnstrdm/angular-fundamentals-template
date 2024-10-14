@@ -65,6 +65,13 @@
     <div class="form__action" (click)="onSubmit()">
       <app-button [buttonText]="btnTextRegistration"></app-button>
     </div>
-    <p>If you have an account you may <b>Login</b></p>
+    <p>
+      If you have an account you may
+      <strong>
+        <a [routerLink]="['/login']" routerLinkActive="router-link-active">
+          Login</a
+        ></strong
+      >
+    </p>
   </div>
 </div>

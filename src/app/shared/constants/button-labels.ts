@@ -4,6 +4,7 @@ export const ButtonLabels = {
   cancel: "Cancel",
   createAuthor: "Create Author",
   createCourse: "Create Course",
+  editCourse: "Edit Course",
   login: "Login",
   logout: "Logout",
   registration: "Registration",

@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
-import { mockedCoursesList } from "./shared/mocks/mocks";
 import { ButtonLabels } from "./shared/constants/button-labels";
+import { AuthService } from "./auth/services/auth.service";
+import { UserStoreService } from "./user/services/user-store.service";
 
 @Component({
   selector: "app-root",
@@ -10,26 +11,28 @@ import { ButtonLabels } from "./shared/constants/button-labels";
 })
 export class AppComponent {
   title = "courses-app";
+  isAuthorized: boolean = false;
+  isAdmin!: boolean;
+  userName: string | null = "";
 
   //  text for buttons
   btnTextLogin: string = ButtonLabels.login;
   btnTextLogout: string = ButtonLabels.logout;
-  btnTextAddNewCourse: string = ButtonLabels.addNewCourse;
 
-  // info page text
-  infoTitle = "Your List Is Empty";
-  infoText = "Please use 'Add New Course' button to add your first course";
+  constructor(
+    public authService: AuthService,
+    private userStoreService: UserStoreService
+  ) {}
 
-  // Mocked Course
-  mockedCourse = mockedCoursesList[0];
-  mockedCoursesList = mockedCoursesList;
-  showCourse(courseId: string) {
-    console.log("Clicked on Show Course with ID:", courseId);
+  ngOnInit() {
+    this.userStoreService.isAdmin$.subscribe(
+      (isadmin) => (this.isAdmin = isadmin)
+    );
+    this.userStoreService.name$.subscribe((name) => (this.userName = name));
   }
-  deleteCourse(courseId: string) {
-    console.log("Clicked on Delete Course with ID:", courseId);
-  }
-  editCourse(courseId: string) {
-    console.log("Clicked on Edit Course with ID:", courseId);
+
+  onLogout() {
+    console.log("LOGGED OUT");
+    this.authService.logout();
   }
 }
