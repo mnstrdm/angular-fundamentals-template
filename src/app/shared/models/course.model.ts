@@ -6,3 +6,10 @@ export interface Course {
   duration: number;
   authors: string[];
 }
+
+export interface newCourse {
+  title: string;
+  description: string;
+  duration: number;
+  authors: string[];
+}
