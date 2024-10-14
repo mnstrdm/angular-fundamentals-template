@@ -1,12 +1,13 @@
 <!-- Replace ::text:: with your code -->
-<h2>Create / Edit Course</h2>
+<h2 *ngIf="isEditPage">Edit Course</h2>
+<h2 *ngIf="!isEditPage">Create Course</h2>
 <form [formGroup]="courseForm">
   <div class="app-plate">
     <div class="course">
       <h3>Main Info</h3>
       <div class="form__control">
         <label for="title">Title</label>
-        <!--Use the name `title` for the form control.-->
+
         <input
           type="text"
           id="title"
@@ -28,7 +29,7 @@
       </div>
       <div class="form__control">
         <label for="description">Description</label>
-        <!--Use the name `description` for the form control.-->
+
         <textarea
           id="description"
           name="description"
@@ -53,7 +54,6 @@
       <h3>Duration</h3>
       <div class="form__control">
         <div class="course__flex">
-          <!--Use the name `duration` for the form array.-->
           <input
             type="number"
             id="duration"
@@ -148,7 +148,13 @@
           (click)="onCancel()"
         ></app-button>
         <app-button
+          *ngIf="!isEditPage"
           [buttonText]="btnTextCreateCourse"
+          (click)="onSubmit()"
+        ></app-button>
+        <app-button
+          *ngIf="isEditPage"
+          [buttonText]="btnTextEditCourse"
           (click)="onSubmit()"
         ></app-button>
       </div>
