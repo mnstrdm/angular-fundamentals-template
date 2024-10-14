@@ -12,6 +12,7 @@ import { CourseListModule } from "./features/courses/courses-list/courses-list.m
 import { CoursesModule } from "./features/courses/courses.module";
 import { AppRoutingModul } from "./app-routing.module";
 import { AuthModule } from "./auth/auth.module";
+import { CommonModule } from "@angular/common";
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +25,7 @@ import { AuthModule } from "./auth/auth.module";
     CoursesModule,
     AppRoutingModul,
     AuthModule,
+    CommonModule,
   ],
   providers: [
     AuthorizedGuard,
