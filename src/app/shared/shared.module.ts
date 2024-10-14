@@ -18,6 +18,7 @@ import { CustomDatePipe } from "./pipes/custom-date.pipe";
 import { EmailValidatorDirective } from "@shared/directives/email.directive";
 import { RouterModule } from "@angular/router";
 import { AuthModule } from "@app/auth/auth.module";
+import { UserModule } from "@app/user/user.module";
 
 const components = [
   HeaderComponent,
@@ -43,6 +44,7 @@ const components = [
     ReactiveFormsModule,
     RouterModule,
     AuthModule,
+    UserModule,
   ],
   exports: [components],
 })
