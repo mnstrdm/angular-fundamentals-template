@@ -1,6 +1,12 @@
 <app-header>
-  <span class="userName">Harry Potter</span>
-  <app-button [buttonText]="btnTextLogout"></app-button>
+  <span *ngIf="authService.isAuthorized$ | async" class="userName">{{
+    userName
+  }}</span>
+  <app-button
+    *ngIf="authService.isAuthorized$ | async"
+    [buttonText]="btnTextLogout"
+    (click)="onLogout()"
+  ></app-button>
 </app-header>
 <div class="app-root">
   <router-outlet></router-outlet>
