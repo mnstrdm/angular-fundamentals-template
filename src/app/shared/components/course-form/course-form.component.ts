@@ -7,15 +7,15 @@ import {
   Validators,
 } from "@angular/forms";
 
-import { v4 } from "uuid";
-
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
-import { mockedAuthorsList } from "@app/shared/mocks/mocks";
 import { Author } from "@app/shared/models/author.model";
 import { ButtonLabels } from "@app/shared/constants/button-labels";
 import { Location } from "@angular/common";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Course, newCourse } from "@app/shared/models/course.model";
+import { CoursesStoreService } from "@app/services/courses-store.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-course-form",
@@ -30,22 +30,38 @@ export class CourseFormComponent implements OnInit {
   authorsListError!: boolean;
   authorsListArray!: FormArray;
   courseAuthorsListArray!: FormArray;
+  newCourse!: newCourse;
+  editableCourse!: Course;
+
+  isEditPage: boolean = false;
+  urlParam: string | null = null;
 
   btnTextCreateCourse: string = ButtonLabels.createCourse;
   btnTextCancel: string = ButtonLabels.cancel;
   btnTextCreateAuthor: string = ButtonLabels.createAuthor;
+  btnTextEditCourse: string = ButtonLabels.editCourse;
 
   constructor(
     public fb: FormBuilder,
     public library: FaIconLibrary,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private courseStoreService: CoursesStoreService
   ) {
     library.addIconPacks(fas);
     this.buildForm();
   }
 
   ngOnInit(): void {
+    // get editable course data
+    this.urlParam = this.route.snapshot.paramMap.get("id");
+    if (this.urlParam) {
+      this.isEditPage = true;
+      this.getEditedCourse(this.urlParam);
+    }
+
+    this.courseStoreService.getAllAuthors();
     this.authorsListArray = this.courseForm.get("authors") as FormArray;
     this.courseAuthorsListArray = this.courseForm.get(
       "courseAuthors"
@@ -59,12 +75,28 @@ export class CourseFormComponent implements OnInit {
   }
 
   initAuthorsList() {
-    this.authorsList = [...mockedAuthorsList];
+    this.courseStoreService.authors$.subscribe((authors) => {
+      this.authorsList = authors;
+    });
+    //this.authorsList = [...mockedAuthorsList];
     this.authorsList.forEach((author) => {
       this.authorsListArray.push(this.fb.control(author));
     });
   }
-  // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
+
+  getEditedCourse(id: string) {
+    this.courseStoreService.getCourse(id).subscribe((respons) => {
+      this.editableCourse = {
+        id: respons.result.id,
+        title: respons.result.id,
+        description: respons.result.description,
+        duration: respons.result.duration,
+        creationDate: respons.result.creationDate,
+        authors: [...respons.result.authors],
+      };
+    });
+  }
+
   buildForm(): void {
     this.courseForm = this.fb.group({
       title: ["", [Validators.required, Validators.minLength(2)]],
@@ -120,7 +152,8 @@ export class CourseFormComponent implements OnInit {
 
   addNewAuthor(): void {
     if (this.newAuthor.valid && this.newAuthor.value.author.length > 0) {
-      this.authors.push(this.fb.control({ id: v4(), name: this.author.value }));
+      this.courseStoreService.createAuthor(this.author.value);
+
       this.newAuthor.reset();
     }
   }
@@ -129,17 +162,39 @@ export class CourseFormComponent implements OnInit {
     this.submitted = true;
     if (this.courseForm.valid) {
       if (this.courseAuthors.value.length > 0) {
-        this.courseForm.reset();
-        this.courseAuthors.clear();
-        this.authorsListArray.clear();
-        this.initAuthorsList();
-        this.authorsListError = false;
-        this.submitted = false;
+        if (this.isEditPage) {
+          // if course is edited
+        } else {
+          // if new course is created
+          this.newCourse = {
+            title: this.title.value,
+            description: this.description.value,
+            duration: this.duration.value,
+            authors: this.courseAuthors.value.map((auth: Author) => auth.id),
+          };
+          console.log("Authors: ", this.authors.value);
+          console.log(
+            "Authors id array: ",
+            this.authors.value.map((auth: Author) => auth.id)
+          );
+          console.log("New Course: ", this.newCourse);
+          this.courseStoreService.createCourse(this.newCourse);
+
+          this.courseForm.reset();
+          this.courseAuthors.clear();
+          this.authorsListArray.clear();
+          this.initAuthorsList();
+          this.authorsListError = false;
+          this.submitted = false;
+          this.router.navigate(["/courses"]);
+        }
       } else {
         this.authorsListError = true;
       }
     }
   }
+
+  onEdit() {}
 
   onCancel() {
     this.location.back();
