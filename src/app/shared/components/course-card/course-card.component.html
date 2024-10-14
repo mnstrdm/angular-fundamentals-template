@@ -29,10 +29,15 @@
       ></app-button>
       <div class="course-card__buttons" *ngIf="isEditabel">
         <app-button
+          *ngIf="isAdmin"
           (click)="onDeleteCourse()"
           [iconName]="faTrashCan"
         ></app-button>
-        <app-button (click)="onEditCourse()" [iconName]="faPencil"></app-button>
+        <app-button
+          *ngIf="isAdmin"
+          (click)="onEditCourse()"
+          [iconName]="faPencil"
+        ></app-button>
       </div>
     </div>
   </div>
