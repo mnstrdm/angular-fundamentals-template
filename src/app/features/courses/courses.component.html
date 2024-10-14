@@ -1,8 +1,8 @@
-<div *ngIf="mockedCoursesList.length > 0; else noCourse">
+<div *ngIf="courses.length > 0; else noCourse">
   <app-search></app-search>
 
   <app-courses-list
-    [courses]="mockedCoursesList"
+    [courses]="courses"
     (showCourse)="showCourse($event)"
     (deleteCourse)="deleteCourse($event)"
     (editCourse)="editCourse($event)"
