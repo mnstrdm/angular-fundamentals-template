@@ -8,8 +8,6 @@ import {
   InfoComponent,
   SearchComponent,
   CourseCardComponent,
-  LoginFormComponent,
-  RegistrationFormComponent,
   CourseFormComponent,
 } from "./components";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -19,7 +17,6 @@ import { EmailValidatorDirective } from "@shared/directives/email.directive";
 import { RouterModule } from "@angular/router";
 import { AuthModule } from "@app/auth/auth.module";
 import { UserModule } from "@app/user/user.module";
-
 const components = [
   HeaderComponent,
   ButtonComponent,
@@ -27,8 +24,6 @@ const components = [
   SearchComponent,
   ModalComponent,
   CourseCardComponent,
-  LoginFormComponent,
-  RegistrationFormComponent,
   CourseFormComponent,
   DurationPipe,
   CustomDatePipe,
