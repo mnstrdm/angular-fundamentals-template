@@ -1,22 +1,23 @@
-import { Component, EventEmitter, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ButtonLabels } from "@app/shared/constants/button-labels";
-import { mockedCoursesList } from "@app/shared/mocks/mocks";
 import { Location } from "@angular/common";
 import { CoursesStoreService } from "@app/services/courses-store.service";
 import { Course } from "@app/shared/models/course.model";
+import { forkJoin, Subscription } from "rxjs";
 
 @Component({
   selector: "app-course-info",
   templateUrl: "./course-info.component.html",
   styleUrls: ["./course-info.component.scss"],
 })
-export class CourseInfoComponent implements OnInit {
+export class CourseInfoComponent implements OnInit, OnDestroy {
   course!: Course | undefined;
   btnTextBack: string = ButtonLabels.back;
   courseId: string | null = null;
   courseAuthors!: string[];
-  authorNames!: string[];
+  authorsByName: string[] = [];
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -25,28 +26,42 @@ export class CourseInfoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.courseId = this.route.snapshot.paramMap.get("id");
+    const courseId = this.route.snapshot.paramMap.get("id");
 
-    if (this.courseId) {
-      this.courseStoreService.getCourse(this.courseId).subscribe({
+    if (courseId) {
+      this.courseStoreService.getCourse(courseId).subscribe({
         next: (course) => {
           this.course = course.result;
           this.courseAuthors = course.result.authors;
+          if (this.courseAuthors.length > 0) {
+            this.createAuthorsNameList(this.courseAuthors);
+          }
+          console.log(this.authorsByName);
+        },
+        error: (err) => {
+          console.error("Hiba a kurzus adatainak betöltésekor:", err);
         },
       });
-      //this.getAuthorById();
     }
   }
 
-  getAuthorById(): void {
-    this.courseAuthors.forEach((id) => {
-      this.courseStoreService.getAuthorById(id).subscribe((author) => {
-        this.authorNames.push(author.result.name);
-      });
-    });
+  createAuthorsNameList(authorsIdList: string[]): void {
+    const authorsObservables = authorsIdList.map((id) =>
+      this.courseStoreService.getAuthorById(id)
+    );
+
+    const sub = forkJoin(authorsObservables).subscribe(
+      (authors) =>
+        (this.authorsByName = authors.map((author) => author.result.name))
+    );
+
+    this.subscriptions.add(sub);
   }
 
   onBack() {
     this.location.back();
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

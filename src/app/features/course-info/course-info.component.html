@@ -19,13 +19,13 @@
     <div>
       <b>Created: </b
       ><span *ngIf="course" class="course-info__info-date">{{
-        course.creationDate | customDate
+        course.creationDate! | customDate
       }}</span>
     </div>
     <div>
       <b>Authors: </b
       ><span *ngIf="course" class="course-info__info-authors">{{
-        course.authors.join(", ")
+        authorsByName.join(", ")
       }}</span>
     </div>
   </div>
