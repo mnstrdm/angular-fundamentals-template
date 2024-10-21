@@ -14,23 +14,22 @@ export class CoursesComponent implements OnInit {
   constructor(
     private router: Router,
     private coursesStoreService: CoursesStoreService,
-    private userStorageService: UserStoreService
+    private userStoreService: UserStoreService
   ) {}
   // info page text
   infoTitle = "Your List Is Empty";
   infoText = "Please use 'Add New Course' button to add your first course";
 
   courses: Course[] = [];
-  loading: boolean = false;
+  isEditable: boolean = false;
 
   ngOnInit() {
-    this.userStorageService.getUser();
+    this.userStoreService.getUser();
+    this.isEditable = this.userStoreService.isAdmin;
     this.coursesStoreService.courses$.subscribe((courses) => {
       this.courses = courses;
     });
-    this.coursesStoreService.loading$.subscribe((isLoading) => {
-      this.loading = isLoading;
-    });
+
     this.coursesStoreService.getAll();
   }
 
@@ -39,9 +38,14 @@ export class CoursesComponent implements OnInit {
   }
   deleteCourse(courseId: string) {
     console.log("Clicked on Delete Course with ID:", courseId);
+    this.coursesStoreService.deleteCourse(courseId);
   }
   editCourse(courseId: string) {
     this.router.navigate(["/courses/edit", courseId]);
     console.log("Clicked on Edit Course with ID:", courseId);
+  }
+
+  onSearch(searchTerm: string) {
+    this.coursesStoreService.filterCourses(searchTerm);
   }
 }
