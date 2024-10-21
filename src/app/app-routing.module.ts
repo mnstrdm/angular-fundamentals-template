@@ -1,50 +1,36 @@
 import { Routes, RouterModule } from "@angular/router";
 import { NgModule } from "@angular/core";
-import {
-  CourseFormComponent,
-  LoginFormComponent,
-  RegistrationFormComponent,
-} from "./shared/components";
-import { CoursesListComponent } from "./features/courses/courses-list/courses-list.component";
-import { CoursesComponent } from "./features/courses/courses.component";
+
 import { CourseInfoComponent } from "./features/course-info/course-info.component";
 import { AuthorizedGuard } from "./auth/guards/authorized.guard";
 import { NotAuthorizedGuard } from "./auth/guards/not-authorized.guard";
-import { AdminGuard } from "./user/guards/admin.guard";
 
 export const routes: Routes = [
-  /* Add your code here */
   {
     path: "login",
-    component: LoginFormComponent,
+    loadChildren: () =>
+      import("./shared/components/login-form/login-form.module").then(
+        (m) => m.LoginFormModule
+      ),
     canActivate: [NotAuthorizedGuard],
   },
   {
     path: "registration",
-    component: RegistrationFormComponent,
-    canActivate: [NotAuthorizedGuard],
+    loadChildren: () =>
+      import(
+        "./shared/components/registration-form/registration-form.module"
+      ).then((m) => m.RegistrationFormModule),
   },
   {
     path: "courses",
-    component: CoursesComponent,
-    canMatch: [AuthorizedGuard],
+    loadChildren: () =>
+      import("./features/courses/courses.module").then((m) => m.CoursesModule),
   },
-  {
-    path: "courses/add",
-    component: CourseFormComponent,
-    canMatch: [AuthorizedGuard],
-    canActivate: [AdminGuard],
-  },
+
   {
     path: "courses/:id",
     component: CourseInfoComponent,
-    canMatch: [AuthorizedGuard],
-  },
-  {
-    path: "courses/edit/:id",
-    component: CourseFormComponent,
-    canMatch: [AuthorizedGuard],
-    canActivate: [AdminGuard],
+    canLoad: [AuthorizedGuard],
   },
 
   {
@@ -53,10 +39,16 @@ export const routes: Routes = [
     pathMatch: "full",
     canMatch: [AuthorizedGuard],
   },
+
+  {
+    path: "**",
+    redirectTo: "/courses",
+    canMatch: [AuthorizedGuard],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModul {}
+export class AppRoutingModule {}
