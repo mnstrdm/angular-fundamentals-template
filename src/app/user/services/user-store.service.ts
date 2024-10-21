@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, catchError, Observable, tap } from "rxjs";
 import { UserService } from "./user.service";
+import { User } from "@app/shared/models/user.model";
 
 @Injectable({
   providedIn: "root",
@@ -8,6 +9,13 @@ import { UserService } from "./user.service";
 export class UserStoreService {
   private name$$ = new BehaviorSubject<string | null>(null);
   private isAdmin$$ = new BehaviorSubject<boolean>(false);
+
+  private loggedInUser$$ = new BehaviorSubject<User>({
+    email: "",
+    password: "",
+  });
+
+  public loggedInUser$: Observable<User> = this.loggedInUser$$.asObservable();
 
   public name$: Observable<string | null> = this.name$$.asObservable();
   public isAdmin$: Observable<boolean> = this.isAdmin$$.asObservable();
@@ -17,21 +25,24 @@ export class UserStoreService {
     this.userService
       .getUser()
       .pipe(
-        tap((response) => {
-          console.log(response);
-          this.name$$.next(response.result.name);
-          if (response.result.role === "admin") {
-            this.isAdmin = true;
-          } else {
-            this.isAdmin = false;
-          }
+        catchError((error) => {
+          console.error("Error getting user from server:", error);
+          return [];
         })
       )
-      .subscribe();
+      .subscribe({
+        next: (response) => {
+          this.loggedInUser$$.next(response.result);
+          this.loggedInUser$.subscribe((user) =>
+            console.log(`The new user object is: `, user)
+          );
+        },
+      });
   }
 
   get isAdmin() {
-    return this.isAdmin$$.getValue();
+    const loggedInUser = this.loggedInUser$$.getValue();
+    return loggedInUser?.role === "admin";
   }
 
   set isAdmin(value: boolean) {
