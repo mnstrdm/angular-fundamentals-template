@@ -1,16 +1,16 @@
 import { Injectable } from "@angular/core";
-import { Route, Router, UrlSegment, UrlTree } from "@angular/router";
+import { CanLoad, Route, Router, UrlSegment, UrlTree } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
-export class AuthorizedGuard {
+export class AuthorizedGuard implements CanLoad {
   // Add your code here
   constructor(private authService: AuthService, private router: Router) {}
 
-  canMatch(
+  canLoad(
     route: Route,
     segment: UrlSegment[]
   ):
