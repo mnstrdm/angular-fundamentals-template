@@ -1,14 +1,11 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 import { Observable, BehaviorSubject } from "rxjs";
+import { tap } from "rxjs";
 import { SessionStorageService } from "./session-storage.service";
 import { User } from "@app/shared/models/user.model";
-import { tap } from "rxjs";
-
-import { Router } from "@angular/router";
-import { UserStoreService } from "@app/user/services/user-store.service";
-
-const TOKEN = "SESSION_TOKEN";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
@@ -16,12 +13,15 @@ const TOKEN = "SESSION_TOKEN";
 export class AuthService {
   private isAuthorized$$: BehaviorSubject<boolean>;
   public isAuthorized$: Observable<boolean>;
+  /* private isAuthorized$$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(this.sessionStorageService.hasToken());
+  public isAuthorized$: Observable<boolean> =
+    this.isAuthorized$$.asObservable(); */
 
   constructor(
     private http: HttpClient,
     private sessionStorageService: SessionStorageService,
-    private router: Router,
-    private userStorageService: UserStoreService
+    private router: Router
   ) {
     this.isAuthorized$$ = new BehaviorSubject<boolean>(
       this.sessionStorageService.hasToken()
@@ -29,54 +29,48 @@ export class AuthService {
     this.isAuthorized$ = this.isAuthorized$$.asObservable();
   }
   login(user: User): Observable<any> {
-    // replace 'any' with the required interface
-    // Add your code here
-
+    console.log("in the auth.service");
     return this.http.post<any>(this.getLoginUrl(), user).pipe(
       tap((response) => {
         if (response && response.result) {
           this.sessionStorageService.setToken(response.result);
           this.isAuthorized$$.next(true);
+          console.log("Isauthorized$$: ", this.isAuthorized$$.getValue());
 
-          this.router.navigate(["/courses"]);
+          this.isAuthorized$.subscribe((value) =>
+            console.log("Isauthorized$: ", value)
+          );
         }
       })
     );
   }
 
   logout(): void {
-    // Add your code here
     this.sessionStorageService.deleteToken();
     this.isAuthorized$$.next(false);
     this.router.navigate(["/login"]);
   }
 
   register(user: User): Observable<any> {
-    // replace 'any' with the required interface
-    // Add your code here
     return this.http.post<any>(this.getRegisterUrl(), user);
   }
 
   get isAuthorised() {
-    // Add your code here. Get isAuthorized$$ value
     return this.isAuthorized$$.getValue();
   }
 
   set isAuthorised(value: boolean) {
-    // Add your code here. Change isAuthorized$$ value
     this.isAuthorized$$.next(value);
   }
 
-  getLoginUrl() {
-    // Add your code here
-    return "http://localhost:4000/login";
+  getLoginUrl(): string {
+    return `${environment.serverApiUrl}/login`;
   }
-  getRegisterUrl() {
-    // Add your code here
-    return "http://localhost:4000/register";
+  getRegisterUrl(): string {
+    return `${environment.serverApiUrl}/register`;
   }
 
-  getToken() {
+  getToken(): string | null {
     return this.sessionStorageService.getToken();
   }
 }
