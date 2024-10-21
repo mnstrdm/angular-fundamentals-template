@@ -1,9 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { mockedAuthorsList } from "@app/shared/mocks/mocks";
 import { Observable } from "rxjs";
-import { newCourse } from "@app/shared/models/course.model";
-import { BaseUrl } from "@app/shared/constants/baseUrl";
+import { Course } from "@app/shared/models/course.model";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
@@ -11,52 +10,47 @@ import { BaseUrl } from "@app/shared/constants/baseUrl";
 export class CoursesService {
   constructor(private http: HttpClient) {}
 
-  coursesApiUrl = `${BaseUrl}/courses`;
-  authorsApiUrl = `${BaseUrl}/authors`;
   getAll(): Observable<any> {
-    // Add your code here
-    return this.http.get<any>(`${this.coursesApiUrl}/all`);
+    return this.http.get<any>(`${environment.serverApiUrl}/courses/all`);
   }
 
-  createCourse(course: newCourse): Observable<any> {
-    // replace 'any' with the required interface
-    // Add your code here
-    return this.http.post<any>(`${this.coursesApiUrl}/add`, course);
+  createCourse(course: Course): Observable<any> {
+    return this.http.post<any>(
+      `${environment.serverApiUrl}/courses/add`,
+      course
+    );
   }
 
-  editCourse(id: string, course: any): Observable<any> {
-    // replace 'any' with the required interface
-    // Add your code here
-    return this.http.put<any>(`${this.coursesApiUrl}/${id}`, course);
+  editCourse(id: string, course: Course): Observable<any> {
+    return this.http.put<any>(
+      `${environment.serverApiUrl}/courses/${id}`,
+      course
+    );
   }
 
   getCourse(id: string): Observable<any> {
-    // Add your code here
-    return this.http.get<any>(`${this.coursesApiUrl}/${id}`);
+    return this.http.get<any>(`${environment.serverApiUrl}/courses/${id}`);
   }
 
   deleteCourse(id: string): Observable<any> {
-    // Add your code here
-    return this.http.delete<any>(`${this.coursesApiUrl}/${id}`);
+    return this.http.delete<any>(`${environment.serverApiUrl}/courses/${id}`);
   }
 
   filterCourses(value: string): Observable<any> {
-    // Add your code here
-    return this.http.get(`${this.coursesApiUrl}/filter?${value}`);
+    return this.http.get(`${environment.serverApiUrl}/courses/filter?${value}`);
   }
 
   getAllAuthors(): Observable<any> {
-    // Add your code here
-    return this.http.get<any>(`${this.authorsApiUrl}/all`);
+    return this.http.get<any>(`${environment.serverApiUrl}/authors/all`);
   }
 
   createAuthor(name: string): Observable<any> {
-    // Add your code here
-    return this.http.post<any>(`${this.authorsApiUrl}/add`, { name: name });
+    return this.http.post<any>(`${environment.serverApiUrl}/authors/add`, {
+      name: name,
+    });
   }
 
   getAuthorById(id: string) {
-    // Add your code here
-    return this.http.get<any>(`${this.authorsApiUrl}/${id}`);
+    return this.http.get<any>(`${environment.serverApiUrl}/authors/${id}`);
   }
 }
