@@ -14,6 +14,8 @@ export class SearchComponent {
   btnTextSearch: string = ButtonLabels.search;
   btnTextAddNewCourse: string = ButtonLabels.addNewCourse;
   isAdmin!: boolean;
+  @Input() placeholder: string = "Input text";
+  @Output() search: EventEmitter<string> = new EventEmitter();
 
   constructor(
     private router: Router,
@@ -22,12 +24,14 @@ export class SearchComponent {
   ) {}
 
   ngOnInit() {
-    this.userStoreService.isAdmin$.subscribe(
+    this.isAdmin = this.userStoreService.isAdmin;
+    /* this.userStoreService.loggedInUser$.subscribe(
+      (user) => (this.isAdmin = user.role === "admin" ? true : false)
+    ); */
+    /* this.userStoreService.isAdmin$.subscribe(
       (isadmin) => (this.isAdmin = isadmin)
-    );
+    ); */
   }
-  @Input() placeholder: string = "Input text";
-  @Output() search: EventEmitter<string> = new EventEmitter();
 
   onSearch() {
     console.log(this.searchTerm);
