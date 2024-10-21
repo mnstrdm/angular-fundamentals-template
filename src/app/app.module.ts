@@ -10,9 +10,11 @@ import { CoursesStoreService } from "@app/services/courses-store.service";
 import { CoursesService } from "@app/services/courses.service";
 import { CourseListModule } from "./features/courses/courses-list/courses-list.module";
 import { CoursesModule } from "./features/courses/courses.module";
-import { AppRoutingModul } from "./app-routing.module";
+import { AppRoutingModule } from "./app-routing.module";
 import { AuthModule } from "./auth/auth.module";
 import { CommonModule } from "@angular/common";
+import { LoginFormModule } from "./shared/components/login-form/login-form.module";
+import { RegistrationFormModule } from "./shared/components/registration-form/registration-form.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,9 +25,11 @@ import { CommonModule } from "@angular/common";
     CourseInfoModule,
     CourseListModule,
     CoursesModule,
-    AppRoutingModul,
+    AppRoutingModule,
     AuthModule,
     CommonModule,
+    LoginFormModule,
+    RegistrationFormModule,
   ],
   providers: [
     AuthorizedGuard,
