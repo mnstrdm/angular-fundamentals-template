@@ -1,8 +1,9 @@
 <div *ngIf="courses.length > 0; else noCourse">
-  <app-search></app-search>
+  <app-search (search)="onSearch($event)"></app-search>
 
   <app-courses-list
     [courses]="courses"
+    [editable]="isEditable"
     (showCourse)="showCourse($event)"
     (deleteCourse)="deleteCourse($event)"
     (editCourse)="editCourse($event)"
