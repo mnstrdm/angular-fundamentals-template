@@ -1,6 +1,6 @@
 <h2 class="text-align-center">Login</h2>
 <div class="app-plate">
-  <form #loginForm="ngForm">
+  <form #loginForm="ngForm" (keydown.enter)="onLogin()">
     <div class="login-form">
       <div>
         <div class="form__control">
@@ -53,7 +53,15 @@
           <app-button [buttonText]="btnTextLogin"></app-button>
         </div>
         <div class="form__text">
-          If you don't have an account you may <strong>Registration</strong>
+          If you don't have an account you may
+          <strong
+            ><a
+              [routerLink]="['/registration']"
+              routerLinkActive="router-link-active"
+            >
+              Registration</a
+            >
+          </strong>
         </div>
       </div>
     </div>

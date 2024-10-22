@@ -14,15 +14,13 @@ export class CoursesListComponent {
   @Output() deleteCourse = new EventEmitter<string>();
 
   onShowCourse(courseId: string) {
-    console.log("Emit course ID from Course List with Show Course");
+   
     this.showCourse.emit(courseId);
   }
   onDeleteCourse(courseId: string) {
-    console.log("Emit course ID from Course List with Delete Course");
     this.deleteCourse.emit(courseId);
   }
   onEditCourse(courseId: string) {
-    console.log("Emit course ID from Course List with Edit Course");
     this.editCourse.emit(courseId);
   }
 }

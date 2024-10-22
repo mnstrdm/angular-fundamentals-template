@@ -1,32 +1,35 @@
 <!-- Replace ::text:: with your code -->
 
-<div class="title">{{ course.title }}</div>
+<div *ngIf="course" class="title">{{ course.title }}</div>
 <div class="course-info">
-  <div class="course-info__description">{{ course.description }}</div>
+  <div *ngIf="course" class="course-info__description">
+    {{ course.description }}
+  </div>
   <div class="course-info__info">
     <div>
-      <b>ID: </b><span class="course-info__info-id">{{ course.id }}</span>
+      <b>ID: </b
+      ><span *ngIf="course" class="course-info__info-id">{{ course.id }}</span>
     </div>
     <div>
       <b>Duration: </b
-      ><span class="course-info__info-duration">{{
+      ><span *ngIf="course" class="course-info__info-duration">{{
         course.duration | duration
       }}</span>
     </div>
     <div>
       <b>Created: </b
-      ><span class="course-info__info-date">{{
-        course.creationDate | customDate
+      ><span *ngIf="course" class="course-info__info-date">{{
+        course.creationDate! | customDate
       }}</span>
     </div>
     <div>
       <b>Authors: </b
-      ><span class="course-info__info-authors">{{
-        course.authors.join(", ")
+      ><span *ngIf="course" class="course-info__info-authors">{{
+        authorsByName.join(", ")
       }}</span>
     </div>
   </div>
 </div>
 <div class="navigation-block">
-  <app-button [buttonText]="btnTextBack"></app-button>
+  <app-button [buttonText]="btnTextBack" (click)="onBack()"></app-button>
 </div>
