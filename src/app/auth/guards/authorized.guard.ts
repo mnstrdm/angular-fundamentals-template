@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
   providedIn: "root",
 })
 export class AuthorizedGuard implements CanLoad {
-  // Add your code here
+
   constructor(private authService: AuthService, private router: Router) {}
 
   canLoad(

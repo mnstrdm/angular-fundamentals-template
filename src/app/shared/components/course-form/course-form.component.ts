@@ -99,7 +99,6 @@ export class CourseFormComponent implements OnInit {
     this.courseStoreService.getCourse(id).subscribe((respons) => {
       this.editableCourse = respons.result;
       this.setFormValues(this.editableCourse);
-      //console.log("Editable course: ", this.editableCourse);
     });
   }
   //----- fill course form with course data we would like to edit
@@ -113,8 +112,7 @@ export class CourseFormComponent implements OnInit {
       let authorById!: Author;
       this.courseStoreService.getAuthorById(author).subscribe((authorObj) => {
         authorById = authorObj.result;
-        //console.log("Author from seFormValues: ", author);
-        //console.log("AuthorObj from seFormValues: ", authorById);
+        
         this.courseAuthors.push(this.fb.control(authorById));
       });
     });
@@ -165,7 +163,6 @@ export class CourseFormComponent implements OnInit {
     const authorToMove = this.authors.at(index).value;
     this.authors.removeAt(index);
     this.courseAuthors.push(this.fb.control(authorToMove));
-    //console.log("Course authors array", this.courseAuthors);
 
     if (this.courseAuthors.value.length > 0) {
       this.authorsListError = false;
@@ -175,7 +172,6 @@ export class CourseFormComponent implements OnInit {
     const authorToMove = this.courseAuthors.at(index).value;
     this.courseAuthors.removeAt(index);
     this.authors.push(this.fb.control(authorToMove));
-    //console.log("Course authors array", this.courseAuthors);
   }
 
   addNewAuthor(): void {
@@ -203,7 +199,6 @@ export class CourseFormComponent implements OnInit {
         this.courseForm.reset();
         this.courseAuthors.clear();
         this.authorsListArray.clear();
-        //this.initAuthorsList();
         this.authorsListError = false;
         this.submitted = false;
         this.router.navigate(["/courses"]);

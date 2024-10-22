@@ -26,7 +26,6 @@ export class LoginFormComponent {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password,
       };
-      console.log("user: ", this.user);
 
       this.authService.login(this.user).subscribe({
         next: () => this.router.navigate(["/courses"]),

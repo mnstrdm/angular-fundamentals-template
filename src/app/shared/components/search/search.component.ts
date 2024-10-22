@@ -25,16 +25,9 @@ export class SearchComponent {
 
   ngOnInit() {
     this.isAdmin = this.userStoreService.isAdmin;
-    /* this.userStoreService.loggedInUser$.subscribe(
-      (user) => (this.isAdmin = user.role === "admin" ? true : false)
-    ); */
-    /* this.userStoreService.isAdmin$.subscribe(
-      (isadmin) => (this.isAdmin = isadmin)
-    ); */
   }
 
   onSearch() {
-    console.log(this.searchTerm);
     this.search.emit(this.searchTerm);
   }
 

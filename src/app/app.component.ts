@@ -37,15 +37,9 @@ export class AppComponent implements OnInit {
     this.authService.isAuthorized$.subscribe(
       (isAuth) => (this.isAuthorized = isAuth)
     );
-
-    /* this.userStoreService.isAdmin$.subscribe(
-      (isadmin) => (this.isAdmin = isadmin)
-    );
-    this.userStoreService.name$.subscribe((name) => (this.userName = name)); */
   }
 
   onLogout() {
-    console.log("LOGGED OUT");
     this.authService.logout();
   }
 }

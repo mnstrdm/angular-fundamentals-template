@@ -41,12 +41,7 @@ export class CourseCardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isAdmin = this.userStoreService.isAdmin;
-    /* this.userStoreService.loggedInUser$.subscribe(
-      (user) => (this.isAdmin = user.role === "admin" ? true : false)
-    ); */
-    /* this.userStoreService.isAdmin$.subscribe(
-      (isadmin) => (this.isAdmin = isadmin)
-    ); */
+
     this.createAuthorsNameList(this.course.authors);
   }
 

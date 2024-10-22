@@ -37,12 +37,10 @@ export class CoursesComponent implements OnInit {
     this.router.navigate(["/courses", courseId]);
   }
   deleteCourse(courseId: string) {
-    console.log("Clicked on Delete Course with ID:", courseId);
     this.coursesStoreService.deleteCourse(courseId);
   }
   editCourse(courseId: string) {
     this.router.navigate(["/courses/edit", courseId]);
-    console.log("Clicked on Edit Course with ID:", courseId);
   }
 
   onSearch(searchTerm: string) {

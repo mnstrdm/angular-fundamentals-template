@@ -33,9 +33,6 @@ export class UserStoreService {
       .subscribe({
         next: (response) => {
           this.loggedInUser$$.next(response.result);
-          this.loggedInUser$.subscribe((user) =>
-            console.log(`The new user object is: `, user)
-          );
         },
       });
   }

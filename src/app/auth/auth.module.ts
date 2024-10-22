@@ -16,8 +16,8 @@ import { TokenInterceptor } from "./interceptors/token.interceptor";
     windowProvider,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor, // Register your TokenInterceptor
-      multi: true, // Allows multiple interceptors
+      useClass: TokenInterceptor,
+      multi: true,
     },
   ],
 })

@@ -13,10 +13,6 @@ import { environment } from "src/environments/environment";
 export class AuthService {
   private isAuthorized$$: BehaviorSubject<boolean>;
   public isAuthorized$: Observable<boolean>;
-  /* private isAuthorized$$: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(this.sessionStorageService.hasToken());
-  public isAuthorized$: Observable<boolean> =
-    this.isAuthorized$$.asObservable(); */
 
   constructor(
     private http: HttpClient,
@@ -29,17 +25,15 @@ export class AuthService {
     this.isAuthorized$ = this.isAuthorized$$.asObservable();
   }
   login(user: User): Observable<any> {
-    console.log("in the auth.service");
     return this.http.post<any>(this.getLoginUrl(), user).pipe(
       tap((response) => {
         if (response && response.result) {
           this.sessionStorageService.setToken(response.result);
           this.isAuthorized$$.next(true);
-          console.log("Isauthorized$$: ", this.isAuthorized$$.getValue());
 
-          this.isAuthorized$.subscribe((value) =>
+          /* this.isAuthorized$.subscribe((value) =>
             console.log("Isauthorized$: ", value)
-          );
+          ); */
         }
       })
     );
