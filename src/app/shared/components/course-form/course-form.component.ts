@@ -15,6 +15,8 @@ import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Course } from "@app/shared/models/course.model";
 import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-course-form",
@@ -35,6 +37,7 @@ export class CourseFormComponent implements OnInit {
   isEditPage: boolean = false;
   urlParam: string | null = null;
   editableCourse!: Course;
+  course$: Observable<Course | null> = this.coursesStateFacades.course$;
 
   //--- Button Labels
   btnTextCreateCourse: string = ButtonLabels.createCourse;
@@ -48,7 +51,8 @@ export class CourseFormComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
-    private courseStoreService: CoursesStoreService
+    private courseStoreService: CoursesStoreService,
+    private coursesStateFacades: CoursesStateFacade
   ) {
     library.addIconPacks(fas);
     this.buildForm();
@@ -61,7 +65,9 @@ export class CourseFormComponent implements OnInit {
     this.urlParam = this.route.snapshot.paramMap.get("id");
     if (this.urlParam) {
       this.isEditPage = true;
-      this.loadCourseData(this.urlParam);
+      this.coursesStateFacades.getSingleCourse(this.urlParam);
+      this.loadCourseData();
+      //this.loadCourseData(this.urlParam);
     }
 
     //--- Init authors list
@@ -69,8 +75,9 @@ export class CourseFormComponent implements OnInit {
     this.courseStoreService.authors$.subscribe((authors) => {
       this.authorsListArray = this.courseForm.get("authors") as FormArray;
       this.authorsListArray.clear();
+      console.log(this.editableCourse);
       //--- If we edit our course do not show authors in author list, who are inculded in course authors
-      if (this.editableCourse.authors.length > 0) {
+      if (this.editableCourse) {
         authors
           .filter((author) => !this.editableCourse.authors.includes(author.id))
           .forEach((author) =>
@@ -95,11 +102,15 @@ export class CourseFormComponent implements OnInit {
     this.submitted = false;
   }
 
-  loadCourseData(id: string) {
-    this.courseStoreService.getCourse(id).subscribe((respons) => {
-      this.editableCourse = respons.result;
+  loadCourseData() {
+    this.course$.subscribe((course) => {
+      this.editableCourse = course!;
       this.setFormValues(this.editableCourse);
     });
+    /* this.courseStoreService.getCourse(id).subscribe((respons) => {
+      this.editableCourse = respons.result;
+      this.setFormValues(this.editableCourse);
+    }); */
   }
   //----- fill course form with course data we would like to edit
   setFormValues(editedCourse: Course): void {
@@ -112,7 +123,7 @@ export class CourseFormComponent implements OnInit {
       let authorById!: Author;
       this.courseStoreService.getAuthorById(author).subscribe((authorObj) => {
         authorById = authorObj.result;
-        
+
         this.courseAuthors.push(this.fb.control(authorById));
       });
     });
@@ -209,10 +220,12 @@ export class CourseFormComponent implements OnInit {
   }
 
   editCourse() {
-    this.courseStoreService.editCourse(this.urlParam!, this.newCourse);
+    //this.courseStoreService.editCourse(this.urlParam!, this.newCourse);
+    this.coursesStateFacades.editCourse(this.urlParam!, this.newCourse);
   }
   createCourse() {
-    this.courseStoreService.createCourse(this.newCourse);
+    //this.courseStoreService.createCourse(this.newCourse);
+    this.coursesStateFacades.createCourse(this.newCourse);
   }
 
   onCancel() {
