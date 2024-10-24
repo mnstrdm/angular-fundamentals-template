@@ -20,11 +20,13 @@ export const routes: Routes = [
       import(
         "./shared/components/registration-form/registration-form.module"
       ).then((m) => m.RegistrationFormModule),
+    canActivate: [NotAuthorizedGuard],
   },
   {
     path: "courses",
     loadChildren: () =>
       import("./features/courses/courses.module").then((m) => m.CoursesModule),
+    canLoad: [AuthorizedGuard],
   },
 
   {
@@ -35,15 +37,12 @@ export const routes: Routes = [
 
   {
     path: "",
-    redirectTo: "/courses",
+    redirectTo: "/login",
     pathMatch: "full",
-    canMatch: [AuthorizedGuard],
   },
-
   {
     path: "**",
     redirectTo: "/courses",
-    canMatch: [AuthorizedGuard],
   },
 ];
 
