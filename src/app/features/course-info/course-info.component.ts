@@ -4,7 +4,8 @@ import { ButtonLabels } from "@app/shared/constants/button-labels";
 import { Location } from "@angular/common";
 import { CoursesStoreService } from "@app/services/courses-store.service";
 import { Course } from "@app/shared/models/course.model";
-import { forkJoin, Subscription } from "rxjs";
+import { forkJoin, Observable, Subscription } from "rxjs";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 
 @Component({
   selector: "app-course-info",
@@ -12,7 +13,8 @@ import { forkJoin, Subscription } from "rxjs";
   styleUrls: ["./course-info.component.scss"],
 })
 export class CourseInfoComponent implements OnInit, OnDestroy {
-  course!: Course | undefined;
+  course!: Course | null;
+  course$: Observable<Course | null> = this.coursesStateFacades.course$;
   btnTextBack: string = ButtonLabels.back;
   courseId: string | null = null;
   courseAuthors!: string[];
@@ -22,13 +24,26 @@ export class CourseInfoComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    private courseStoreService: CoursesStoreService
+    private courseStoreService: CoursesStoreService,
+    private coursesStateFacades: CoursesStateFacade
   ) {}
 
   ngOnInit(): void {
     const courseId = this.route.snapshot.paramMap.get("id");
 
     if (courseId) {
+      this.coursesStateFacades.getSingleCourse(courseId);
+      this.course$.subscribe((course) => {
+        this.course = course;
+        console.log("course: ", course);
+        this.courseAuthors = course!.authors;
+        if (this.courseAuthors.length > 0) {
+          this.createAuthorsNameList(this.courseAuthors);
+        }
+      });
+    }
+
+    /* if (courseId) {
       this.courseStoreService.getCourse(courseId).subscribe({
         next: (course) => {
           this.course = course.result;
@@ -42,7 +57,7 @@ export class CourseInfoComponent implements OnInit, OnDestroy {
           console.error("Hiba a kurzus adatainak betöltésekor:", err);
         },
       });
-    }
+    } */
   }
 
   createAuthorsNameList(authorsIdList: string[]): void {
