@@ -1,5 +1,5 @@
 <div class="app-search">
-  <form #searchForm="ngForm" class="search-form">
+  <form #searchForm="ngForm" class="search-form" (keydown.enter)="onSearch()">
     <input
       type="text"
       [placeholder]="placeholder"
