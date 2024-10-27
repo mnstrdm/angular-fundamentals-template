@@ -32,17 +32,17 @@ export const routes: Routes = [
   {
     path: "courses/:id",
     component: CourseInfoComponent,
-    canLoad: [AuthorizedGuard],
+    canActivate: [AuthorizedGuard],
   },
 
   {
     path: "",
-    redirectTo: "/login",
+    redirectTo: "courses",
     pathMatch: "full",
   },
   {
     path: "**",
-    redirectTo: "/courses",
+    redirectTo: "courses",
   },
 ];
 
