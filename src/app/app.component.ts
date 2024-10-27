@@ -1,9 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 import { ButtonLabels } from "./shared/constants/button-labels";
 import { AuthService } from "./auth/services/auth.service";
 import { UserStoreService } from "./user/services/user-store.service";
-import { User } from "./shared/models/user.model";
+import { AuthenticationFacade } from "./store/authentication/authentication.facade";
+import { UserStateFacade } from "./store/user/user.facade";
+import { map, Observable } from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -12,10 +14,13 @@ import { User } from "./shared/models/user.model";
 })
 export class AppComponent implements OnInit {
   title = "courses-app";
-  isAuthorized!: boolean;
-  isAdmin!: boolean;
+  //isAuthorized!: boolean;
+  isAdmin$: Observable<boolean> = this.userStateFacade.isAdmin$;
   userName: string | undefined = "";
-  loggedInUser!: User;
+  userName$: Observable<string | undefined> = this.userStateFacade.user$.pipe(
+    map((user) => user?.name)
+  );
+  //loggedInUser!: User;
 
   //  text for buttons
   btnTextLogin: string = ButtonLabels.login;
@@ -23,23 +28,14 @@ export class AppComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private userStoreService: UserStoreService
+    private userStoreService: UserStoreService,
+    private userStateFacade: UserStateFacade,
+    private authenticationFacade: AuthenticationFacade
   ) {}
 
-  ngOnInit() {
-    this.userStoreService.loggedInUser$.subscribe({
-      next: (user) => {
-        this.isAdmin = user.role === "admin" ? true : false;
-        this.userName = user.name;
-      },
-    });
-
-    this.authService.isAuthorized$.subscribe(
-      (isAuth) => (this.isAuthorized = isAuth)
-    );
-  }
+  ngOnInit() {}
 
   onLogout() {
-    this.authService.logout();
+    this.authenticationFacade.logout();
   }
 }
