@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject, map } from "rxjs";
 import { tap } from "rxjs";
 import { SessionStorageService } from "./session-storage.service";
 import { User } from "@app/shared/models/user.model";
@@ -17,33 +16,29 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private sessionStorageService: SessionStorageService,
-    private router: Router
   ) {
     this.isAuthorized$$ = new BehaviorSubject<boolean>(
       this.sessionStorageService.hasToken()
     );
     this.isAuthorized$ = this.isAuthorized$$.asObservable();
   }
+
   login(user: User): Observable<any> {
     return this.http.post<any>(this.getLoginUrl(), user).pipe(
       tap((response) => {
         if (response && response.result) {
           this.sessionStorageService.setToken(response.result);
           this.isAuthorized$$.next(true);
-
-          /* this.isAuthorized$.subscribe((value) =>
-            console.log("Isauthorized$: ", value)
-          ); */
         }
-      })
+      }),
+      map((response) => response.result)
     );
   }
 
-  logout(): void {
-    this.sessionStorageService.deleteToken();
-    this.isAuthorized$$.next(false);
-    this.router.navigate(["/login"]);
+  logout(): Observable<any> {
+    return this.http.delete<any>(this.getLogoutUrl());
   }
+
 
   register(user: User): Observable<any> {
     return this.http.post<any>(this.getRegisterUrl(), user);
@@ -63,8 +58,14 @@ export class AuthService {
   getRegisterUrl(): string {
     return `${environment.serverApiUrl}/register`;
   }
+  getLogoutUrl(): string {
+    return `${environment.serverApiUrl}/logout`;
+  }
 
   getToken(): string | null {
     return this.sessionStorageService.getToken();
+  }
+  deleteToken(): void {
+    this.sessionStorageService.deleteToken();
   }
 }
