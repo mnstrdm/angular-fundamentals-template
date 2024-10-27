@@ -3,6 +3,7 @@ import { Store, select } from "@ngrx/store";
 import * as CoursesActions from "./courses.actions";
 import * as CoursesSelectors from "./courses.selectors";
 import { CoursesState } from "./courses.reducer";
+import { Course } from "@app/shared/models/course.model";
 
 @Injectable({
   providedIn: "root",
@@ -42,8 +43,10 @@ export class CoursesStateFacade {
     this.store.dispatch(CoursesActions.requestEditCourse({ id, course: body }));
   }
 
-  createCourse(body: any): void {
-    this.store.dispatch(CoursesActions.requestCreateCourse({ course: body }));
+  createCourse(newCourse: Course): void {
+    this.store.dispatch(
+      CoursesActions.requestCreateCourse({ course: newCourse })
+    );
   }
 
   deleteCourse(id: string): void {
