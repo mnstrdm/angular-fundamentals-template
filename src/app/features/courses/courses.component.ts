@@ -1,13 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { CoursesStoreService } from "@app/services/courses-store.service";
 
 import { Course } from "@app/shared/models/course.model";
 import { AuthorsStateFacade } from "@app/store/author/authors.facade";
 import { CoursesStateFacade } from "@app/store/courses/courses.facade";
-import { UserStateFacade } from "@app/store/user/user.facade";
-import { UserStoreService } from "@app/user/services/user-store.service";
-import { map, Observable, Subscription, tap } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 
 @Component({
   selector: "app-courses",
@@ -19,12 +16,8 @@ export class CoursesComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   constructor(
     private router: Router,
-    private coursesStoreService: CoursesStoreService,
-    private userStoreService: UserStoreService,
     private coursesStateFacades: CoursesStateFacade,
-    private authorsStateFacade: AuthorsStateFacade,
-    private userStateFacade: UserStateFacade
-  ) {}
+    private authorsStateFacade: AuthorsStateFacade  ) {}
   // info page text
   infoTitle = "Your List Is Empty";
   infoText = "Please use 'Add New Course' button to add your first course";
@@ -33,7 +26,7 @@ export class CoursesComponent implements OnInit {
   isEditable: boolean = false;
 
   ngOnInit() {
-    this.userStoreService.getUser();
+    //this.userStoreService.getUser();
     this.authorsStateFacade.getAllAuthors();
 
     this.loadCourses();

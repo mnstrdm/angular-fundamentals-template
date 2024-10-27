@@ -39,7 +39,6 @@ export class CourseCardComponent implements OnInit, OnDestroy {
   ) {}
 
   btnTextShowCourse: string = ButtonLabels.showCourse;
-  //isAdmin!: boolean;
   isAdmin$: Observable<boolean> = this.userStateFacade.isAdmin$;
   authorsByName: string[] = [];
   private subscriptions: Subscription[] = [];
@@ -49,7 +48,6 @@ export class CourseCardComponent implements OnInit, OnDestroy {
   faPencil: IconDefinition = faPencil;
 
   ngOnInit() {
-    //this.isAdmin = this.userStoreService.isAdmin;
 
     this.authorsStateFacade.isAllAuthorLoading$
       .pipe(

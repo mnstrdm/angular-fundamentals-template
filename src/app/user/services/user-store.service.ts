@@ -21,21 +21,6 @@ export class UserStoreService {
   public isAdmin$: Observable<boolean> = this.isAdmin$$.asObservable();
 
   constructor(private userService: UserService) {}
-  getUser() {
-    this.userService
-      .getUser()
-      .pipe(
-        catchError((error) => {
-          console.error("Error getting user from server:", error);
-          return [];
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          this.loggedInUser$$.next(response.result);
-        },
-      });
-  }
 
   get isAdmin() {
     const loggedInUser = this.loggedInUser$$.getValue();

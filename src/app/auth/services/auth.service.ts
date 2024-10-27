@@ -15,7 +15,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private sessionStorageService: SessionStorageService,
+    private sessionStorageService: SessionStorageService
   ) {
     this.isAuthorized$$ = new BehaviorSubject<boolean>(
       this.sessionStorageService.hasToken()
@@ -36,20 +36,12 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
+    this.isAuthorized$$.next(false);
     return this.http.delete<any>(this.getLogoutUrl());
   }
 
-
   register(user: User): Observable<any> {
     return this.http.post<any>(this.getRegisterUrl(), user);
-  }
-
-  get isAuthorised() {
-    return this.isAuthorized$$.getValue();
-  }
-
-  set isAuthorised(value: boolean) {
-    this.isAuthorized$$.next(value);
   }
 
   getLoginUrl(): string {
