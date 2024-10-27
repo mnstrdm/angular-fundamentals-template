@@ -11,7 +11,7 @@ import {
   UrlTree,
 } from "@angular/router";
 import { map, Observable, take } from "rxjs";
-import { AuthenticationFacade } from "@app/store/authentication/authentication.facade";
+import { AuthService } from "../services/auth.service";
 
 @Injectable({
   providedIn: "root",
@@ -21,7 +21,7 @@ export class AuthorizedGuard implements CanLoad, CanActivate, CanMatch {
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
   constructor(
     private router: Router,
-    private authenticationFacade: AuthenticationFacade
+    private authService: AuthService
   ) {}
 
   canLoad(
@@ -32,7 +32,7 @@ export class AuthorizedGuard implements CanLoad, CanActivate, CanMatch {
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
-    return this.authenticationFacade.isAuthorized$.pipe(
+    return this.authService.isAuthorized$.pipe(
       take(1),
       map((isAuthorized) => {
         if (isAuthorized) {
@@ -52,7 +52,7 @@ export class AuthorizedGuard implements CanLoad, CanActivate, CanMatch {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.authenticationFacade.isAuthorized$.pipe(
+    return this.authService.isAuthorized$.pipe(
       take(1),
       map((isAuthorized) => {
         if (isAuthorized) {
