@@ -28,10 +28,6 @@ export class CoursesService {
       .pipe(map((response) => response.result));
   }
 
-  getCourse(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.serverApiUrl}/courses/${id}`);
-  }
-
   getSpecificCourse(id: string): Observable<any> {
     return this.http
       .get<any>(`${environment.serverApiUrl}/courses/${id}`)
@@ -41,13 +37,11 @@ export class CoursesService {
   deleteCourse(id: string): Observable<any> {
     return this.http.delete<any>(`${environment.serverApiUrl}/courses/${id}`);
   }
-  // maybe return the result here as well as getAll
-  filterCourses(value: string): Observable<any> {
-    return this.http.get(`${environment.serverApiUrl}/courses/filter?${value}`);
-  }
 
   getAllAuthors(): Observable<any> {
-    return this.http.get<any>(`${environment.serverApiUrl}/authors/all`);
+    return this.http
+      .get<any>(`${environment.serverApiUrl}/authors/all`)
+      .pipe(map((response) => response.result));
   }
 
   createAuthor(name: string): Observable<any> {
