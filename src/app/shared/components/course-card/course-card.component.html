@@ -27,7 +27,7 @@
         (click)="onShowCourse()"
         [buttonText]="btnTextShowCourse"
       ></app-button>
-      <div class="course-card__buttons" *ngIf="isAdmin">
+      <div class="course-card__buttons" *ngIf="isAdmin$ | async">
         <app-button
           (click)="onDeleteCourse()"
           [iconName]="faTrashCan"
