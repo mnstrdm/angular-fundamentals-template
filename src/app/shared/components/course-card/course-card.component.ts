@@ -15,7 +15,9 @@ import { Course } from "@app/shared/models/course.model";
 import { ButtonLabels } from "@app/shared/constants/button-labels";
 import { UserStoreService } from "@app/user/services/user-store.service";
 import { CoursesStoreService } from "@app/services/courses-store.service";
-import { Subscription, forkJoin } from "rxjs";
+import { Observable, Subscription, filter, map, take } from "rxjs";
+import { AuthorsStateFacade } from "@app/store/author/authors.facade";
+import { UserStateFacade } from "@app/store/user/user.facade";
 @Component({
   selector: "app-course-card",
   templateUrl: "./course-card.component.html",
@@ -31,35 +33,36 @@ export class CourseCardComponent implements OnInit, OnDestroy {
 
   constructor(
     private userStoreService: UserStoreService,
-    private courseStoreService: CoursesStoreService
+    private userStateFacade: UserStateFacade,
+    private courseStoreService: CoursesStoreService,
+    private authorsStateFacade: AuthorsStateFacade
   ) {}
 
   btnTextShowCourse: string = ButtonLabels.showCourse;
-  isAdmin!: boolean;
-  authorsByName: String[] = [];
-  private subscriptions: Subscription = new Subscription();
-
-  ngOnInit() {
-    this.isAdmin = this.userStoreService.isAdmin;
-
-    this.createAuthorsNameList(this.course.authors);
-  }
+  //isAdmin!: boolean;
+  isAdmin$: Observable<boolean> = this.userStateFacade.isAdmin$;
+  authorsByName: string[] = [];
+  private subscriptions: Subscription[] = [];
 
   // icons for buttons
   faTrashCan: IconDefinition = faTrashCan;
   faPencil: IconDefinition = faPencil;
 
-  createAuthorsNameList(authorsIdList: string[]): void {
-    const authorsObservables = authorsIdList.map((id) =>
-      this.courseStoreService.getAuthorById(id)
-    );
+  ngOnInit() {
+    //this.isAdmin = this.userStoreService.isAdmin;
 
-    const sub = forkJoin(authorsObservables).subscribe(
-      (authors) =>
-        (this.authorsByName = authors.map((author) => author.result.name))
-    );
-
-    this.subscriptions.add(sub);
+    this.authorsStateFacade.isAllAuthorLoading$
+      .pipe(
+        filter((isLoading) => !isLoading),
+        take(1)
+      )
+      .subscribe(() => {
+        const subscribeGetAllAuthors = this.courseStoreService
+          .getAuthorsById(this.course.authors)
+          .pipe(map((authors) => authors.map((author) => author.name)))
+          .subscribe((authorsName) => (this.authorsByName = authorsName));
+        this.subscriptions.push(subscribeGetAllAuthors);
+      });
   }
 
   onShowCourse() {
@@ -73,6 +76,8 @@ export class CourseCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.subscriptions.forEach((subscrition) => {
+      subscrition.unsubscribe();
+    });
   }
 }
