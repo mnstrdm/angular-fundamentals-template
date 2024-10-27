@@ -9,7 +9,7 @@
     <app-button [buttonText]="btnTextSearch" (click)="onSearch()"></app-button>
   </form>
   <app-button
-    *ngIf="isAdmin"
+    *ngIf="isAdmin$ | async"
     class="addButton"
     [buttonText]="btnTextAddNewCourse"
     (click)="onAddNewCourse()"
