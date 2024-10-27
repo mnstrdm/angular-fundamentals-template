@@ -3,9 +3,11 @@ import { Router } from "@angular/router";
 import { CoursesStoreService } from "@app/services/courses-store.service";
 
 import { Course } from "@app/shared/models/course.model";
+import { AuthorsStateFacade } from "@app/store/author/authors.facade";
 import { CoursesStateFacade } from "@app/store/courses/courses.facade";
+import { UserStateFacade } from "@app/store/user/user.facade";
 import { UserStoreService } from "@app/user/services/user-store.service";
-import { Observable } from "rxjs";
+import { map, Observable, Subscription, tap } from "rxjs";
 
 @Component({
   selector: "app-courses",
@@ -14,11 +16,14 @@ import { Observable } from "rxjs";
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<Course[]> = this.coursesStateFacades.allCourses$;
+  private subscriptions: Subscription[] = [];
   constructor(
     private router: Router,
     private coursesStoreService: CoursesStoreService,
     private userStoreService: UserStoreService,
-    private coursesStateFacades: CoursesStateFacade
+    private coursesStateFacades: CoursesStateFacade,
+    private authorsStateFacade: AuthorsStateFacade,
+    private userStateFacade: UserStateFacade
   ) {}
   // info page text
   infoTitle = "Your List Is Empty";
@@ -29,24 +34,21 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit() {
     this.userStoreService.getUser();
-    this.isEditable = this.userStoreService.isAdmin;
-    /* this.coursesStoreService.courses$.subscribe((courses) => {
-      this.courses = courses;
-      
-    }); */
+    this.authorsStateFacade.getAllAuthors();
+
     this.loadCourses();
-    //this.coursesStoreService.getAll();
   }
 
   loadCourses() {
     this.coursesStateFacades.getAllCourses();
-    this.courses$.subscribe((course) => (this.courses = course));
+    this.subscriptions.push(
+      this.courses$.subscribe((course) => (this.courses = course))
+    );
   }
   showCourse(courseId: string) {
     this.router.navigate(["/courses", courseId]);
   }
   deleteCourse(courseId: string) {
-    //this.coursesStoreService.deleteCourse(courseId);
     this.coursesStateFacades.deleteCourse(courseId);
   }
   editCourse(courseId: string) {
@@ -59,6 +61,10 @@ export class CoursesComponent implements OnInit {
     } else {
       this.coursesStateFacades.getFilteredCourses(searchTerm);
     }
-    //this.coursesStoreService.filterCourses(searchTerm);
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscrition) => {
+      subscrition.unsubscribe();
+    });
   }
 }
