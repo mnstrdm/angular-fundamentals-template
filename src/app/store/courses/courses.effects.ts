@@ -37,14 +37,11 @@ export class CoursesEffects {
       ofType(CoursesActions.requestFilteredCourses),
       withLatestFrom(this.coursesStateFacade.allCourses$),
       map(([action, courses]) => {
-        const searchValue = action.title.toLowerCase();
-
-        const filteredCourses = courses.filter(
-          (course) =>
-            course.title.toLowerCase().includes(searchValue) ||
-            course.description.toLowerCase().includes(searchValue)
-        );
-
+        const filteredCourses =
+          this.coursesStateFacade.filteredCoursesBySearchTerm(
+            courses,
+            action.title
+          );
         return CoursesActions.requestFilteredCoursesSuccess({
           courses: filteredCourses,
         });
