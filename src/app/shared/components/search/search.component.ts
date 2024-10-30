@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { ButtonLabels } from "@app/shared/constants/button-labels";
 import { UserStateFacade } from "@app/store/user/user.facade";
@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
   templateUrl: "./search.component.html",
   styleUrls: ["./search.component.scss"],
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   searchTerm: string = "";
   btnTextSearch: string = ButtonLabels.search;
   btnTextAddNewCourse: string = ButtonLabels.addNewCourse;
@@ -22,6 +22,9 @@ export class SearchComponent {
     private userStateFacade: UserStateFacade
   ) {}
 
+  ngOnInit(): void {
+    this.userStateFacade.getUser();
+  }
   onSearch() {
     this.search.emit(this.searchTerm);
   }
