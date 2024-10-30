@@ -14,7 +14,6 @@ import { ButtonLabels } from "@app/shared/constants/button-labels";
 import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Course } from "@app/shared/models/course.model";
-import { CoursesStoreService } from "@app/services/courses-store.service";
 import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 import { filter, Observable, Subscription, take } from "rxjs";
 import { AuthorsStateFacade } from "@app/store/author/authors.facade";
@@ -57,7 +56,6 @@ export class CourseFormComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
-    private courseStoreService: CoursesStoreService,
     private coursesStateFacades: CoursesStateFacade,
     private authorsStateFacades: AuthorsStateFacade
   ) {
@@ -79,7 +77,6 @@ export class CourseFormComponent implements OnInit {
             take(1)
           )
           .subscribe(() => this.loadCourseData());
-      this.subscriptions.push(subscribeIsSingleCourseLoading);
     } else {
       const subscribeAuthors = this.authors$.subscribe((authors) => {
         this.authorsListArray = this.courseForm.get("authors") as FormArray;
@@ -127,7 +124,7 @@ export class CourseFormComponent implements OnInit {
       description: editedCourse.description,
       duration: editedCourse.duration,
     });
-    const subscribeGetAuthorsById = this.courseStoreService
+    const subscribeGetAuthorsById = this.authorsStateFacades
       .getAuthorsById(editedCourse.authors)
       .subscribe((authors) => {
         authors.forEach((author) =>

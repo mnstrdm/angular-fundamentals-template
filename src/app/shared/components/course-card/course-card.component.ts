@@ -13,9 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Course } from "@app/shared/models/course.model";
 import { ButtonLabels } from "@app/shared/constants/button-labels";
-import { UserStoreService } from "@app/user/services/user-store.service";
-import { CoursesStoreService } from "@app/services/courses-store.service";
-import { Observable, Subscription, filter, map, take } from "rxjs";
+import { Observable, Subscription, filter, map, switchMap, take } from "rxjs";
 import { AuthorsStateFacade } from "@app/store/author/authors.facade";
 import { UserStateFacade } from "@app/store/user/user.facade";
 @Component({
@@ -32,9 +30,7 @@ export class CourseCardComponent implements OnInit, OnDestroy {
   @Output() clickOnEdit: EventEmitter<string> = new EventEmitter();
 
   constructor(
-    private userStoreService: UserStoreService,
     private userStateFacade: UserStateFacade,
-    private courseStoreService: CoursesStoreService,
     private authorsStateFacade: AuthorsStateFacade
   ) {}
 
@@ -48,19 +44,21 @@ export class CourseCardComponent implements OnInit, OnDestroy {
   faPencil: IconDefinition = faPencil;
 
   ngOnInit() {
-
-    this.authorsStateFacade.isAllAuthorLoading$
+    const subscribeAuthorsByName = this.authorsStateFacade.isAllAuthorLoading$
       .pipe(
         filter((isLoading) => !isLoading),
-        take(1)
+        take(1),
+        switchMap(() =>
+          this.authorsStateFacade
+            .getAuthorsById(this.course.authors)
+            .pipe(map((authors) => authors.map((author) => author.name)))
+        )
       )
-      .subscribe(() => {
-        const subscribeGetAllAuthors = this.courseStoreService
-          .getAuthorsById(this.course.authors)
-          .pipe(map((authors) => authors.map((author) => author.name)))
-          .subscribe((authorsName) => (this.authorsByName = authorsName));
-        this.subscriptions.push(subscribeGetAllAuthors);
+      .subscribe((authorsName) => {
+        this.authorsByName = authorsName;
       });
+
+    this.subscriptions.push(subscribeAuthorsByName);
   }
 
   onShowCourse() {
