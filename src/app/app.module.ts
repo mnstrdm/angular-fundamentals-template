@@ -15,7 +15,6 @@ import { AppComponent } from "@app/app.component";
 import { NotAuthorizedGuard } from "@app/auth/guards/not-authorized.guard";
 import { AuthorizedGuard } from "@app/auth/guards/authorized.guard";
 
-import { CoursesStoreService } from "@app/services/courses-store.service";
 import { CoursesService } from "@app/services/courses.service";
 
 import { CourseInfoModule } from "./features/course-info/course-info.module";
@@ -43,12 +42,7 @@ import { RegistrationFormModule } from "./shared/components/registration-form/re
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot(effects),
   ],
-  providers: [
-    AuthorizedGuard,
-    NotAuthorizedGuard,
-    CoursesService,
-    CoursesStoreService,
-  ],
+  providers: [AuthorizedGuard, NotAuthorizedGuard, CoursesService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
