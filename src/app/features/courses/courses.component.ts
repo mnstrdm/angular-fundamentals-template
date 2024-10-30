@@ -17,7 +17,8 @@ export class CoursesComponent implements OnInit {
   constructor(
     private router: Router,
     private coursesStateFacades: CoursesStateFacade,
-    private authorsStateFacade: AuthorsStateFacade  ) {}
+    private authorsStateFacade: AuthorsStateFacade
+  ) {}
   // info page text
   infoTitle = "Your List Is Empty";
   infoText = "Please use 'Add New Course' button to add your first course";
