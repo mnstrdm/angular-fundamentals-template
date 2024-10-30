@@ -12,13 +12,7 @@ export interface UserState {
 }
 
 export const initialState: UserState = {
-  user: {
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-    id: "",
-  },
+  user: {} as User,
   isUserLoading: false,
   errorMessage: null,
   isAdmin: false,
