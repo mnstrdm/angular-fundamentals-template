@@ -1,15 +1,7 @@
 import { Injectable } from "@angular/core";
 import { createEffect, Actions, ofType } from "@ngrx/effects";
 import * as AuthorsActions from "./authors.actions";
-import {
-  catchError,
-  concatMap,
-  map,
-  mergeMap,
-  of,
-  tap,
-  withLatestFrom,
-} from "rxjs";
+import { catchError, concatMap, map, mergeMap, of, withLatestFrom } from "rxjs";
 import { CoursesService } from "@app/services/courses.service";
 import { AuthorsStateFacade } from "./authors.facade";
 
@@ -23,10 +15,9 @@ export class AuthorsEffects {
   getAll$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthorsActions.requestAllAuthors),
-      tap(() => console.log("GetAll$ effect triggered")),
+
       mergeMap(() =>
         this.coursesService.getAllAuthors().pipe(
-          tap((authors) => console.log("authors from service: ", authors)),
           map((authors) =>
             AuthorsActions.requestAllAuthorsSuccess({ authors })
           ),
