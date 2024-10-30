@@ -38,6 +38,14 @@ export class CoursesStateFacade {
       CoursesActions.requestFilteredCourses({ title: searchValue })
     );
   }
+  filteredCoursesBySearchTerm(courses: Course[], searchTerm: string): Course[] {
+    const searchValue = searchTerm.toLowerCase();
+    return courses.filter(
+      (course) =>
+        course.title.toLowerCase().includes(searchValue) ||
+        course.description.toLowerCase().includes(searchValue)
+    );
+  }
 
   editCourse(id: string, body: any): void {
     this.store.dispatch(CoursesActions.requestEditCourse({ id, course: body }));
