@@ -4,7 +4,7 @@ import { ButtonLabels } from "@app/shared/constants/button-labels";
 import { User } from "@app/shared/models/user.model";
 import { Router } from "@angular/router";
 import { AuthenticationFacade } from "@app/store/authentication/authentication.facade";
-import { filter, take } from "rxjs";
+import { filter, switchMap, take } from "rxjs";
 import { UserStateFacade } from "@app/store/user/user.facade";
 
 @Component({
@@ -36,17 +36,16 @@ export class LoginFormComponent {
       this.authenticationFacade.isLoginLoading$
         .pipe(
           filter((isLoading) => !isLoading),
-          take(1)
-        )
-        .subscribe(() => {
-          this.userStateFacade.getUser();
-          this.userStateFacade.isUserLoading$
-            .pipe(
+          take(1),
+          switchMap(() => {
+            this.userStateFacade.getUser();
+            return this.userStateFacade.isUserLoading$.pipe(
               filter((isLoading) => !isLoading),
               take(1)
-            )
-            .subscribe(() => this.router.navigate(["/courses"]));
-        });
+            );
+          })
+        )
+        .subscribe(() => this.router.navigate(["/courses"]));
 
       this.loginForm.resetForm();
       this.submitted = false;
