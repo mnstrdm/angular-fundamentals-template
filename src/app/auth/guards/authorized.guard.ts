@@ -1,14 +1,28 @@
 import { Injectable } from "@angular/core";
-import { CanLoad, Route, Router, UrlSegment, UrlTree } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  CanLoad,
+  CanMatch,
+  Route,
+  Router,
+  RouterStateSnapshot,
+  UrlSegment,
+  UrlTree,
+} from "@angular/router";
+import { map, Observable, take } from "rxjs";
 import { AuthService } from "../services/auth.service";
-import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
-export class AuthorizedGuard implements CanLoad {
-
-  constructor(private authService: AuthService, private router: Router) {}
+export class AuthorizedGuard implements CanLoad, CanActivate, CanMatch {
+  private uuidPattern =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   canLoad(
     route: Route,
@@ -18,10 +32,52 @@ export class AuthorizedGuard implements CanLoad {
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
-    if (this.authService.isAuthorised) {
+    return this.authService.isAuthorized$.pipe(
+      take(1),
+      map((isAuthorized) => {
+        if (isAuthorized) {
+          return true;
+        } else {
+          return this.router.createUrlTree(["/login"]);
+        }
+      })
+    );
+  }
+
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+    return this.authService.isAuthorized$.pipe(
+      take(1),
+      map((isAuthorized) => {
+        if (isAuthorized) {
+          return true;
+        } else {
+          return this.router.createUrlTree(["/login"]);
+        }
+      })
+    );
+  }
+
+  canMatch(
+    route: Route,
+    segments: UrlSegment[]
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+    const id = segments[0]?.path;
+
+    if (this.uuidPattern.test(id)) {
       return true;
     } else {
-      return this.router.createUrlTree(["/login"]);
+      return this.router.createUrlTree(["/courses"]);
     }
   }
 }

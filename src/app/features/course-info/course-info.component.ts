@@ -1,10 +1,19 @@
-import { Component, EventEmitter, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ButtonLabels } from "@app/shared/constants/button-labels";
 import { Location } from "@angular/common";
-import { CoursesStoreService } from "@app/services/courses-store.service";
 import { Course } from "@app/shared/models/course.model";
-import { forkJoin, Subscription } from "rxjs";
+import {
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subscription,
+  switchMap,
+  take,
+} from "rxjs";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
+import { AuthorsStateFacade } from "@app/store/author/authors.facade";
 
 @Component({
   selector: "app-course-info",
@@ -12,56 +21,52 @@ import { forkJoin, Subscription } from "rxjs";
   styleUrls: ["./course-info.component.scss"],
 })
 export class CourseInfoComponent implements OnInit, OnDestroy {
-  course!: Course | undefined;
+  course$: Observable<Course | null> = this.coursesStateFacade.course$;
   btnTextBack: string = ButtonLabels.back;
   courseId: string | null = null;
-  courseAuthors!: string[];
   authorsByName: string[] = [];
-  private subscriptions: Subscription = new Subscription();
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    private courseStoreService: CoursesStoreService
+    private coursesStateFacade: CoursesStateFacade,
+    private authorsStateFacade: AuthorsStateFacade
   ) {}
 
   ngOnInit(): void {
     const courseId = this.route.snapshot.paramMap.get("id");
 
     if (courseId) {
-      this.courseStoreService.getCourse(courseId).subscribe({
-        next: (course) => {
-          this.course = course.result;
-          this.courseAuthors = course.result.authors;
-          if (this.courseAuthors.length > 0) {
-            this.createAuthorsNameList(this.courseAuthors);
-          }
-          console.log(this.authorsByName);
-        },
-        error: (err) => {
-          console.error("Hiba a kurzus adatainak betöltésekor:", err);
-        },
-      });
+      this.coursesStateFacade.getSingleCourse(courseId);
+      const subscribeAuthorsByName = combineLatest([
+        this.coursesStateFacade.isSingleCourseLoading$.pipe(
+          filter((isLoading) => !isLoading),
+          take(1)
+        ),
+        this.course$.pipe(
+          filter((course) => course !== null && course !== undefined)
+        ),
+      ])
+        .pipe(
+          switchMap(([_, course]) => {
+            return this.authorsStateFacade
+              .getAuthorsById(course!.authors)
+              .pipe(map((authors) => authors.map((author) => author.name)));
+          })
+        )
+        .subscribe((authorsName) => (this.authorsByName = authorsName));
+
+      this.subscriptions.push(subscribeAuthorsByName);
     }
-  }
-
-  createAuthorsNameList(authorsIdList: string[]): void {
-    const authorsObservables = authorsIdList.map((id) =>
-      this.courseStoreService.getAuthorById(id)
-    );
-
-    const sub = forkJoin(authorsObservables).subscribe(
-      (authors) =>
-        (this.authorsByName = authors.map((author) => author.result.name))
-    );
-
-    this.subscriptions.add(sub);
   }
 
   onBack() {
     this.location.back();
   }
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.subscriptions.forEach((subscrition) => {
+      subscrition.unsubscribe();
+    });
   }
 }

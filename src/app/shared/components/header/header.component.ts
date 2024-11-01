@@ -1,18 +1,29 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { AuthService } from "@app/auth/services/auth.service";
+import { ButtonLabels } from "@app/shared/constants/button-labels";
+import { AuthenticationFacade } from "@app/store/authentication/authentication.facade";
+import { UserStateFacade } from "@app/store/user/user.facade";
+import { map, Observable } from "rxjs";
 
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.scss"],
 })
-export class HeaderComponent implements OnInit {
-  isAuthorised: boolean = false;
+export class HeaderComponent {
+  isAuthorized$: Observable<boolean> = this.authService.isAuthorized$;
+  userName$: Observable<string | undefined> = this.userStateFacade.user$.pipe(
+    map((user) => user?.name)
+  );
+  btnTextLogout: string = ButtonLabels.logout;
 
-  constructor(public authService: AuthService) {}
-  ngOnInit(): void {
-    this.authService.isAuthorized$.subscribe(
-      (isAuth) => (this.isAuthorised = isAuth)
-    );
+  constructor(
+    private authService: AuthService,
+    private userStateFacade: UserStateFacade,
+    private authenticationFacade: AuthenticationFacade
+  ) {}
+
+  onLogout() {
+    this.authenticationFacade.logout();
   }
 }

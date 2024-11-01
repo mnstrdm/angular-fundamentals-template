@@ -10,24 +10,23 @@ const routes: Routes = [
   {
     path: "",
     component: CoursesComponent,
-    canLoad: [AuthorizedGuard],
+    canActivate: [AuthorizedGuard],
   },
   {
     path: "add",
     component: CourseFormComponent,
-    canLoad: [AuthorizedGuard],
-    canActivate: [AdminGuard],
+    canActivate: [AuthorizedGuard, AdminGuard],
   },
-  /*  {
+  /*   {
     path: ":id",
-    component: CourseInfoComponent, 
-    canLoad: [AuthorizedGuard],
+    component: CourseInfoComponent,
+    canActivate: [AuthorizedGuard],
+    canMatch: [AuthorizedGuard],
   }, */
   {
     path: "edit/:id",
     component: CourseFormComponent,
-    canLoad: [AuthorizedGuard],
-    canActivate: [AdminGuard],
+    canActivate: [AuthorizedGuard, AdminGuard],
   },
 ];
 

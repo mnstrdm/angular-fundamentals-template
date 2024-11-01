@@ -1,5 +1,5 @@
 <div class="app-search">
-  <form #searchForm="ngForm" class="search-form">
+  <form #searchForm="ngForm" class="search-form" (keydown.enter)="onSearch()">
     <input
       type="text"
       [placeholder]="placeholder"
@@ -9,7 +9,7 @@
     <app-button [buttonText]="btnTextSearch" (click)="onSearch()"></app-button>
   </form>
   <app-button
-    *ngIf="isAdmin"
+    *ngIf="isAdmin$ | async"
     class="addButton"
     [buttonText]="btnTextAddNewCourse"
     (click)="onAddNewCourse()"
